@@ -1,7 +1,1 @@
 .env
-
-db.sqlite3
-
-venv
-venv/pyvenv.cfg
-../.vs
