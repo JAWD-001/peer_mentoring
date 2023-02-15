@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'account_management.apps.AccountManagementConfig',
     'chat.apps.ChatConfig',
     'groups.apps.GroupsConfig',
-    'user_messages.apps.UserMessagesConfig',
+    'posts.apps.PostsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
