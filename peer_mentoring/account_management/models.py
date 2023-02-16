@@ -1,5 +1,5 @@
 from django.db import models
-from django.utils import timezone
+from datetime import datetime
 
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.validators import UnicodeUsernameValidator
@@ -34,7 +34,7 @@ class CustomUser(AbstractUser):
                                 validators=[username_validator, MaxLengthValidator(150),MinLengthValidator(1)], error_messages={"unique":"A user with that username already exists."})
     email = models.EmailField(unique=True, blank=False, validators=[EmailValidator()] )
     password = models.CharField(blank=False, max_length=127)
-    date_joined = models.DateTimeField(default=timezone.now)
+    date_joined = models.DateTimeField(default=datetime.now)
 
 class UserProfile(models.Model):
     id = models.BigAutoField(primary_key=True)
