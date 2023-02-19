@@ -30,6 +30,7 @@ class CustomUser(AbstractUser):
     id = models.BigAutoField(primary_key=True)
     first_name = models.CharField(max_length=150, blank=False, help_text="Required. 150 characters or less.", validators=[MaxLengthValidator(150), MinLengthValidator(1)], error_messages={'blank':'A first name is required.'})
     last_name = models.CharField(max_length=150, blank=False, help_text="Required. 150 characters or less.", validators=[MaxLengthValidator(150), MinLengthValidator(1)], error_messages={'blank':'A last name is required.'})
+    dob = models.DateField(blank=False, help_text="Required, please enter a date", )
     username = models.CharField(max_length=150, unique=True, help_text="Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.",
                                 validators=[username_validator, MaxLengthValidator(150),MinLengthValidator(1)], error_messages={"unique":"A user with that username already exists."})
     email = models.EmailField(unique=True, blank=False, validators=[EmailValidator()] )
