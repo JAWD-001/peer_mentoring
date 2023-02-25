@@ -2,7 +2,7 @@ from django.db import models
 
 from peer_mentoring.account_management.models import UserProfile
 
-from datetime import datetime
+
 # Create your models here.
 
 class Avatar(models.Model):
@@ -28,7 +28,7 @@ class Group(models.Model):
     avatar = models.ForeignKey(Avatar)
     description = models.TextField(max_length=250, blank=False, null=False)
     members = models.ManyToManyField(UserProfile)
-    added = models.DateTimeField(auto_now_add=datetime.now, blank=False)
+    added = models.DateTimeField(auto_now_add=True, null=False, blank=False)
 
     def __str__(self):
         return self.title, self.description
