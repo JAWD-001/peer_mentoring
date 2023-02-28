@@ -31,4 +31,4 @@ class Group(models.Model):
     added = models.DateTimeField(auto_now_add=True, null=False, blank=False)
 
     def __str__(self):
-        return self.title, self.description
+        return self.title

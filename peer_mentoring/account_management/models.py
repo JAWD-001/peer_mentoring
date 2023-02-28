@@ -34,7 +34,7 @@ class CustomUser(AbstractUser):
     date_joined = models.DateTimeField(default=datetime.now)
 
     def __str__(self):
-        return self.first_name, self.last_name, self.dob, self.username, self.email, self.date_joined
+        return self.username
 
 
 class Photo(models.Model):
