@@ -1,6 +1,10 @@
-from django.contrib import admin
 from django.urls import path
 
+from .views import CreateUserView, LoginView
+
+app_name = 'account_management'
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('create/', CreateUserView.as_view(), name='create'),
+    path('', LoginView.as_view(), name='landing'),
 ]
