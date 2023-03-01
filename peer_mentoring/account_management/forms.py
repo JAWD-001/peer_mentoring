@@ -60,6 +60,7 @@ class CreateUserForm(UserCreationForm):
                 'username': forms.TextInput(attrs={'placeholder': 'Username'}),
                 'email': forms.TextInput(attrs={'placeholder': 'Email'}),
                 'dob': forms.DateInput(attrs={'placeholder': 'Data of Birth'}),
+                'dob': forms.DateInput(attrs={'type':'date'}),
                 'password': forms.PasswordInput(attrs={'placeholder': 'Password from model'}),
             }
 
@@ -79,6 +80,7 @@ class ResetPasswordForm(PasswordResetForm):
         widgets = {
             'email': forms.TextInput(attrs={'placeholder':'Email'}),
         }
+
 
 class ForgotUsernameForm(PasswordResetForm):
     email = forms.EmailField(widget=forms.TextInput(attrs=
