@@ -4,16 +4,16 @@ from django.views.generic import CreateView
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import LoginView, PasswordResetView, PasswordResetDoneView, PasswordResetCompleteView, PasswordResetConfirmView, LogoutView
 from django.urls import reverse_lazy
+from django.contrib.auth.models import User
 
-from .models import CustomUser
 from .forms import CreateUserForm, LoginForm, ResetPasswordForm
 # Create your views here.
 
 
 class CreateUserView(CreateView):
-    model = CustomUser
+    model = User
     form_class = CreateUserForm
-    fields = 'username, first_name, last_name, dob, email '
+    fields = 'username, first_name, last_name, email '
     template_name = 'account_management/create_user.html'
     success_url = reverse_lazy('account_management:landing')
 

@@ -2,7 +2,7 @@ from django.db import models
 
 from django.contrib.auth import get_user_model
 
-from account_management.models import CustomUser, UserProfile
+from account_management.models import UserProfile
 
 
 # Create your models here.
