@@ -1,9 +1,14 @@
 from django.db import models
 
-from peer_mentoring.account_management.models import UserProfile
+from django.contrib.auth import get_user_model
+
+from account_management.models import CustomUser, UserProfile
 
 
 # Create your models here.
+
+user = get_user_model()
+
 
 class Avatar(models.Model):
     id = models.BigAutoField(primary_key=True)
