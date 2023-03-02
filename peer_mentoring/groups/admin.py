@@ -15,6 +15,4 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'avatar', 'description', 'members'
-                    'added')
-
+    list_display = ('id', 'title', 'avatar', 'description', 'added')
