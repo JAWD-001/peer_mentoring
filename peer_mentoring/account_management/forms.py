@@ -60,7 +60,7 @@ class CreateUserForm(UserCreationForm):
                 'username': forms.TextInput(attrs={'placeholder': 'Username'}),
                 'email': forms.TextInput(attrs={'placeholder': 'Email'}),
                 'dob': forms.DateInput(attrs={'placeholder': 'Data of Birth'}),
-                'dob': forms.DateInput(attrs={'type':'date'}),
+                'dob': forms.NumberInput(attrs={'type': 'date'}),
                 'password': forms.PasswordInput(attrs={'placeholder': 'Password from model'}),
             }
 
