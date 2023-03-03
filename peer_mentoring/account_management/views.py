@@ -10,14 +10,6 @@ from .forms import CreateUserForm, LoginForm, ResetPasswordForm
 # Create your views here.
 
 
-class CreateUserView(CreateView):
-    model = User
-    form_class = CreateUserForm
-    fields = 'username, first_name, last_name, email '
-    template_name = 'account_management/create_user.html'
-    success_url = reverse_lazy('account_management:landing')
-
-
 def create_user(request):
     form = CreateUserForm(request.POST)
     if form.is_valid():
@@ -48,4 +40,6 @@ def login_view(request):
 def logout_view(request):
     logout(request)
 
-
+def password_reset(request):
+    username = request.POST['username']
+    form = Pass
