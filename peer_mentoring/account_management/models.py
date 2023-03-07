@@ -1,11 +1,8 @@
 from django.db import models
-from datetime import datetime
 
-from django.contrib.auth.models import AbstractUser
-from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.contrib.auth.models import User
 from django.core.validators import MaxLengthValidator, MinLengthValidator, EmailValidator
-
+from peer_mentoring.groups.models import Group
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -38,6 +35,7 @@ class UserProfile(models.Model):
     bio = models.TextField(blank=True, null=True)
     interests = models.ManyToManyField(Interest)
     dob = models.DateField(blank=True, null=True, help_text="Required, please enter a date", )
+    groups_joined = models.ManyToManyField(Group)
 
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name}'
