@@ -80,6 +80,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'peer_mentoring.wsgi.application'
+ASGI_APPLICATION = 'peer_mentoring.routing.application'
 
 
 # Database

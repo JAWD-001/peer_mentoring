@@ -2,7 +2,7 @@ from django.db import models
 
 from django.contrib.auth.models import User
 from django.core.validators import MaxLengthValidator, MinLengthValidator, EmailValidator
-from peer_mentoring.groups.models import Group
+from groups.models import Group
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
