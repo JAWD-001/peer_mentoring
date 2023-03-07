@@ -34,6 +34,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    #'channels',
+    #'daphne',
     'account_management.apps.AccountManagementConfig',
     'chat.apps.ChatConfig',
     'groups.apps.GroupsConfig',
@@ -48,7 +50,6 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'channels',
 ]
 
 MIDDLEWARE = [
@@ -66,7 +67,7 @@ ROOT_URLCONF = 'peer_mentoring.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates'), os.path.join(BASE_DIR, 'templates/allauth')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'), os.path.join(BASE_DIR, 'peer_mentoring/templates/allauth')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -80,7 +81,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'peer_mentoring.wsgi.application'
-ASGI_APPLICATION = 'peer_mentoring.routing.application'
+
+ASGI_APPLICATION = 'routing.application'
 
 
 # Database
