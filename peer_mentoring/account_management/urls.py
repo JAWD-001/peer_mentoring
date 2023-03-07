@@ -1,9 +1,9 @@
 from django.urls import path
 
-from .views import create_user
+from .views import home, create_user
 
 app_name = 'account_management'
 
 urlpatterns = [
-    path('create/', create_user, name='create_user'),
+    path('', home)
 ]

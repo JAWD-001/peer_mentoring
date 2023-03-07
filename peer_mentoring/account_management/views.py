@@ -9,6 +9,9 @@ from django.contrib.auth.models import User
 from .forms import CreateUserForm, LoginForm, ResetPasswordForm
 # Create your views here.
 
+def home(request):
+    return render(request, 'account_management/home.html')
+
 
 def create_user(request):
     form = CreateUserForm(request.POST)
