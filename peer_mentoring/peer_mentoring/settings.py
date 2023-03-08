@@ -34,7 +34,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    #'channels',
+    'channels',
     #'daphne',
     'account_management.apps.AccountManagementConfig',
     'chat.apps.ChatConfig',
@@ -82,8 +82,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'peer_mentoring.wsgi.application'
 
-ASGI_APPLICATION = 'routing.application'
+ASGI_APPLICATION = 'peer_mentoring.routing.application'
 
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('127.0.0.1', 6379)]
+        },
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -148,5 +156,4 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGOUT_REDIRECT_URL = '/login/'
-
 
