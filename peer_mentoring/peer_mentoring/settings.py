@@ -82,7 +82,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'peer_mentoring.wsgi.application'
 
-ASGI_APPLICATION = 'peer_mentoring.routing.application'
+ASGI_APPLICATION = 'peer_mentoring.asgi.application'
 
 CHANNEL_LAYERS = {
     'default': {
