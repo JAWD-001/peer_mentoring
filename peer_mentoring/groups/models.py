@@ -1,9 +1,14 @@
 from django.db import models
 
-from peer_mentoring.account_management.models import UserProfile
+from django.contrib.auth import get_user_model
+
+from account_management.models import UserProfile
 
 
 # Create your models here.
+
+user = get_user_model()
+
 
 class Avatar(models.Model):
     id = models.BigAutoField(primary_key=True)
@@ -25,7 +30,7 @@ class Category(models.Model):
 class Group(models.Model):
     id = models.BigAutoField(primary_key=True)
     title = models.CharField(max_length=50, blank=False, unique=True)
-    avatar = models.ForeignKey(Avatar)
+    avatar = models.ForeignKey(Avatar, on_delete=models.CASCADE)
     description = models.TextField(max_length=250, blank=False, null=False)
     members = models.ManyToManyField(UserProfile)
     added = models.DateTimeField(auto_now_add=True, null=False, blank=False)
