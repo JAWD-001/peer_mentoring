@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def group_chat_room(request, group_id):
     try:
-        group = request.user.groups_joined.get(id=group_id)
+        group = request.user.userprofile.groups_joined.get(id=group_id)
     except:
         return HttpResponseForbidden()
     return render(request, 'chat/room.html', {'group': group})
