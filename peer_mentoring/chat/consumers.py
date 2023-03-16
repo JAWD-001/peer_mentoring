@@ -1,14 +1,16 @@
 import json
 
-from asgiref.sync import async_to_sync
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.utils import timezone
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        self.user = self.scope["user"]
-        self.id = self.scope["url_route"]["kwargs"]["group_id"]
+        # maybe this needs to be pulling from the userprofile?
+        self.user.userprofile = self.scope["userprofile"]
+        # same thing but for groups?
+        self.group.id = self.scope["url_route"]["kwargs"]["group_id"]
+        # should the room group name be the same as groups.id?
         self.room_group_name = f"chat_{self.id}"
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
