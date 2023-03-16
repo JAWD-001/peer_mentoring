@@ -1,10 +1,7 @@
 import json
 
-from asgiref.sync import async_to_sync
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.utils import timezone
-
-from peer_mentoring.account_management.models import UserProfile
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
