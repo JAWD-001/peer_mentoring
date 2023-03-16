@@ -4,11 +4,16 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.utils import timezone
 
+from peer_mentoring.account_management.models import UserProfile
+
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        self.user = self.scope["userprofile"]
-        self.id = self.scope["url_route"]["kwargs"]["group_id"]
+        # maybe this needs to be pulling from the userprofile?
+        self.user.userprofile = self.scope["userprofile"]
+        # same thing but for groups?
+        self.groups.id = self.scope["url_route"]["kwargs"]["group_id"]
+        # should the room group name be the same as groups.id?
         self.room_group_name = f"chat_{self.id}"
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
