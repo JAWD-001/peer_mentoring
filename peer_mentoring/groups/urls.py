@@ -11,10 +11,5 @@ app_name = "groups"
 urlpatterns = [
     path("", group_index_view, name="groups_home"),
     path("group_detail/<int:pk>", group_view, name="group_detail"),
-    path(
-        "group_members/",
-        group_members_index_view,
-        name="group_members",
-        name="group_members",
-    ),
+    path("group_members/", group_members_index_view, name="group_members"),
 ]
