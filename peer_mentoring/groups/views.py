@@ -1,8 +1,9 @@
+from account_management.models import UserProfile
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
+from posts.models import Comment, Post
 
-from peer_mentoring.account_management.models import UserProfile
-
+from .forms import GroupPostCommentForm, GroupPostForm
 from .models import Group
 
 # Create your views here.
@@ -16,8 +17,8 @@ def group_index_view(request):
 
 
 @login_required
-def group_view(request, detail_id):
-    group = get_object_or_404(Group, pk=detail_id)
+def group_detail_view(request):
+    group = get_object_or_404(Group, pk=Group.id)
     context = {
         "group": group,
     }
@@ -25,7 +26,36 @@ def group_view(request, detail_id):
 
 
 @login_required
+def group_posts(request):
+    posts = Post.objects.all().filter(id=Group.id)
+    comments = request.POST.get(Comment)
+    return render(request, "group_detail.html", posts, comments)
+
+
+@login_required
 def group_members_index_view(request):
     members = UserProfile.objects.all()
     context = {"members": members}
-    return render(request, "group_member_index", context)
+    return render(request, "group_detail.html", context)
+
+
+@login_required
+def group_create_post_view(request):
+    if request.method == "POST":
+        form = GroupPostForm(request.POST)
+        post = form.save()
+        return redirect("group-detail", post.id)
+    else:
+        form = GroupPostForm()
+    return render(request, "group_detail.html", {"form": form})
+
+
+@login_required
+def group_create_post_comment_view(request):
+    if request.method == "POST":
+        form = GroupPostCommentForm(request.POST)
+        comment = form.save()
+        return redirect("group-detail", comment.id)
+    else:
+        form = GroupPostForm()
+    return render(request, "group_detail.html", {"form": form})

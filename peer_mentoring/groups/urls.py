@@ -1,10 +1,6 @@
 from django.urls import path
 
-from peer_mentoring.groups.views import (
-    group_index_view,
-    group_members_index_view,
-    group_view,
-)
+from .views import group_index_view, group_members_index_view, group_view
 
 app_name = "groups"
 
