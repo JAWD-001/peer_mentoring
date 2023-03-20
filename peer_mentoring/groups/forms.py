@@ -5,7 +5,7 @@ from posts.models import Comment, Post
 class GroupPostForm(ModelForm):
     class Meta:
         model = Post
-        fields = ["title, content"]
+        fields = ["title", "content"]
 
 
 class GroupPostCommentForm(ModelForm):
