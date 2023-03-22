@@ -27,7 +27,7 @@ def group_detail_view(request):
 
 @login_required
 def group_posts(request):
-    posts = Post.objects.all().filter(id=Group.id)
+    posts = Post.objects.filter(id=Group.id)
     comments = request.POST.get(Comment)
     return render(request, "group_detail.html", posts, comments)
 
