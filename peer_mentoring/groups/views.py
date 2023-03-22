@@ -43,8 +43,9 @@ def group_members_index_view(request):
 def group_create_post_view(request):
     if request.method == "POST":
         form = GroupPostForm(request.POST)
-        post = form.save()
-        return redirect("group-detail", post.id)
+        if form.is_valid():
+            post = form.save()
+            return redirect("group-detail", post.id)
     else:
         form = GroupPostForm()
     return render(request, "group_detail.html", {"form": form})
@@ -54,8 +55,9 @@ def group_create_post_view(request):
 def group_create_post_comment_view(request):
     if request.method == "POST":
         form = GroupPostCommentForm(request.POST)
-        comment = form.save()
-        return redirect("group-detail", comment.id)
+        if form.is_valid():
+            comment = form.save()
+            return redirect("group-detail", comment.id)
     else:
         form = GroupPostForm()
     return render(request, "group_detail.html", {"form": form})
