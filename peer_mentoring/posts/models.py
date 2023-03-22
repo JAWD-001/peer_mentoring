@@ -16,7 +16,7 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=150)
     content = models.TextField(blank=False, null=True)
-    comments = models.OneToMany(Comment)
+    comments = models.ForeignKey(Comment, on_delete=models.CASCADE)
     added = models.DateTimeField(auto_now_add=True, null=False, blank=False)
     is_group_post = models.BooleanField(blank=False, null=False, default=True)
     group_id = models.ForeignKey(Group, on_delete=models.CASCADE, blank=True, null=True)
