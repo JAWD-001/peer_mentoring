@@ -1,4 +1,5 @@
 from account_management.models import UserProfile
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from posts.models import Comment, Post
@@ -45,7 +46,9 @@ def group_create_post_view(request):
         form = GroupPostForm(request.POST)
         if form.is_valid():
             post = form.save()
-            return redirect("group-detail", post.id)
+            return redirect("group-detail", post.id), messages.add_message(
+                request, messages.INFO, "Comment Added!"
+            )
     else:
         form = GroupPostForm()
     return render(request, "group_detail.html", {"form": form})
