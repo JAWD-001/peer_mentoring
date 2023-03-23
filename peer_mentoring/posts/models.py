@@ -5,18 +5,26 @@ from groups.models import Group
 # Create your models here.
 
 
-class Comment(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    content = models.TextField(max_length=200, blank=False, null=True)
-    added = models.DateTimeField(auto_now_add=True, null=False, blank=False)
-
-
 class Post(models.Model):
     id = models.BigAutoField(primary_key=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=150)
     content = models.TextField(blank=False, null=True)
-    comments = models.ForeignKey(Comment, on_delete=models.CASCADE)
     added = models.DateTimeField(auto_now_add=True, null=False, blank=False)
     group = models.BooleanField(blank=False, null=False, default=True)
     group_id = models.ForeignKey(Group, on_delete=models.CASCADE, blank=True, null=True)
+
+    @property
+    def is_group_post(self):
+        return self.group_id is not None
+
+    @is_group_post.setter
+    def group_post_id(self, new_value: int):
+        self.group_id = new_value
+
+
+class Comment(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField(max_length=200, blank=False, null=True)
+    added = models.DateTimeField(auto_now_add=True, null=False, blank=False)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
