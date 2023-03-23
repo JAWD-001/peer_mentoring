@@ -18,8 +18,10 @@ def group_index_view(request):
 
 
 @login_required
-def group_detail_view(request):
-    group = get_object_or_404(Group, pk=Group.id)
+def group_detail_view(request, pk):
+    group = get_object_or_404(Group, pk=pk)
+    # TODO: render the posts for the group and pas them to
+    # the template and show them
     context = {
         "group": group,
     }
@@ -41,21 +43,25 @@ def group_members_index_view(request):
 
 
 @login_required
-def group_create_post_view(request):
+def group_create_post_view(request, group_id):
+    group = Group.objects.get(pk=group_id)
     if request.method == "POST":
         form = GroupPostForm(request.POST)
         if form.is_valid():
-            post = form.save()
-            return redirect("group-detail", post.id), messages.add_message(
-                request, messages.INFO, "Comment Added!"
-            )
+            post = form.save(commit=False)
+            post.group = group
+            post.author = request.user
+            post.save()
+            messages.success(request, "Comment Added!")
+            return redirect("groups:group_detail", group.id)
     else:
         form = GroupPostForm()
     return render(request, "group_detail.html", {"form": form})
 
 
 @login_required
-def group_create_post_comment_view(request):
+def group_create_post_comment_view(request, post_id):
+    # TODO: do the same as group_create_post_view
     if request.method == "POST":
         form = GroupPostCommentForm(request.POST)
         if form.is_valid():
@@ -64,5 +70,5 @@ def group_create_post_comment_view(request):
             comment.save()
             return redirect("group-detail", comment.id)
     else:
-        form = GroupPostForm()
+        form = GroupPostCommentForm()
     return render(request, "group_detail.html", {"form": form})

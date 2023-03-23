@@ -11,16 +11,15 @@ class Post(models.Model):
     title = models.CharField(max_length=150)
     content = models.TextField(blank=False, null=True)
     added = models.DateTimeField(auto_now_add=True, null=False, blank=False)
-    group = models.BooleanField(blank=False, null=False, default=True)
-    group_id = models.ForeignKey(Group, on_delete=models.CASCADE, blank=True, null=True)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, blank=True, null=True)
 
     @property
     def is_group_post(self):
-        return self.group_id is not None
+        return self.group is not None
 
     @is_group_post.setter
     def group_post_id(self, new_value: int):
-        self.group_id = new_value
+        self.group = new_value
 
 
 class Comment(models.Model):
