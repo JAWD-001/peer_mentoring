@@ -56,7 +56,9 @@ def group_create_post_comment_view(request):
     if request.method == "POST":
         form = GroupPostCommentForm(request.POST)
         if form.is_valid():
-            comment = form.save()
+            comment = form.save(commit=False)
+            comment.post = group_posts
+            comment.save()
             return redirect("group-detail", comment.id)
     else:
         form = GroupPostForm()
