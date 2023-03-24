@@ -2,10 +2,9 @@ from account_management.models import UserProfile
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
-from posts.models import Post
 
 from .forms import GroupPostCommentForm, GroupPostForm
-from .models import Group
+from .models import Group, Post
 
 # Create your views here.
 

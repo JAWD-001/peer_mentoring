@@ -9,6 +9,7 @@ from .views import (
 )
 
 app_name = "groups"
+
 urlpatterns = [
     path("", group_index_view, name="groups_home"),
     path("group_detail/<int:pk>", group_detail_view, name="group_detail"),
