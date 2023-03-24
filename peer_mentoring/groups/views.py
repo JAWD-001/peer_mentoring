@@ -1,7 +1,7 @@
 from account_management.models import UserProfile
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import redirect, render
 
 from .forms import GroupPostCommentForm, GroupPostForm
 from .models import Group, Post
@@ -14,21 +14,6 @@ def group_index_view(request):
     groups = Group.objects.all()
     context = {"groups": groups}
     return render(request, "groups_index.html", context)
-
-
-@login_required
-def group_detail_view(request, pk):
-    group = get_object_or_404(Group, pk=pk)
-    posts = Post.objects.get(pk=group.id)
-    # TODO: render the posts for the group and pas them to
-    # the template and show them
-    # Would this work? I'm thinking that I am getting posts
-    # based on the group_id that we collected in group variable
-    context = {
-        "group": group,
-        "post": posts,
-    }
-    return render(request, "group_detail.html", context)
 
 
 """@login_required
@@ -52,8 +37,10 @@ def group_members_index_view(request):
 
 
 @login_required
-def group_create_post_view(request, group_id):
+def group_detail(request, group_id):
     group = Group.objects.get(pk=group_id)
+    posts = Post.objects.filter(group=group)
+
     if request.method == "POST":
         form = GroupPostForm(request.POST)
         if form.is_valid():
@@ -62,10 +49,20 @@ def group_create_post_view(request, group_id):
             post.author = request.user
             post.save()
             messages.success(request, "Post Added!")
-            return redirect("groups:group_detail", group.id)
+            form = GroupPostForm()
     else:
         form = GroupPostForm()
-    return render(request, "group_detail.html", {"form": form})
+
+    context = {
+        "form": form,
+        "posts": posts,
+    }
+    return render(request, "group_detail.html", context)
+
+
+@login_required
+def show_post(request, post_id):
+    pass
 
 
 @login_required

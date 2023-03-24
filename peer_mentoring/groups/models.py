@@ -29,7 +29,7 @@ class Group(models.Model):
     title = models.CharField(max_length=50, blank=False, unique=True)
     avatar = models.ForeignKey(Avatar, on_delete=models.CASCADE)
     description = models.TextField(max_length=250, blank=False, null=False)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, default="test")
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     added = models.DateTimeField(auto_now_add=True, null=False, blank=False)
 
     def __str__(self):
