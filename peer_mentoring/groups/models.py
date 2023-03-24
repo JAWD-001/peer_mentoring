@@ -18,7 +18,7 @@ class Avatar(models.Model):
 
 class Category(models.Model):
     id = models.BigAutoField(primary_key=True)
-    name = models.CharField(max_length=30, blank=False)
+    name = models.CharField(max_length=30, null=True, blank=False)
 
     def __str__(self):
         return self.name
@@ -29,6 +29,7 @@ class Group(models.Model):
     title = models.CharField(max_length=50, blank=False, unique=True)
     avatar = models.ForeignKey(Avatar, on_delete=models.CASCADE)
     description = models.TextField(max_length=250, blank=False, null=False)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     added = models.DateTimeField(auto_now_add=True, null=False, blank=False)
 
     def __str__(self):
@@ -57,3 +58,11 @@ class Comment(models.Model):
     content = models.TextField(max_length=200, blank=False, null=True)
     added = models.DateTimeField(auto_now_add=True, null=False, blank=False)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
+
+    @property
+    def is_post_comment(self):
+        return self.post
+
+    @is_post_comment.setter
+    def post_comment_id(self, new_value: int):
+        self.post = new_value
