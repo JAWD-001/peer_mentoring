@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Avatar, Category, Group, Post
+from .models import Avatar, Category, Comment, Group, Post
 
 
 @admin.register(Avatar)
@@ -21,3 +21,8 @@ class GroupAdmin(admin.ModelAdmin):
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = ("author", "title", "content", "added", "group")
+
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ["author", "content", "added", "post"]

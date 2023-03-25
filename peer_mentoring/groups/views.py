@@ -1,7 +1,7 @@
 from account_management.models import UserProfile
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import GroupPostCommentForm, GroupPostForm
 from .models import Group, Post
@@ -10,38 +10,23 @@ from .models import Group, Post
 
 
 @login_required
-def group_index_view(request):
+def group_index(request):
     groups = Group.objects.all()
     context = {"groups": groups}
     return render(request, "groups_index.html", context)
 
 
-"""@login_required
-def group_posts(request):
-    posts = Post.objects.all.filter(id=Group.id)
-    comments = request.POST.get(Comment)
-    return render(request, "group_detail.html", posts, comments)"""
-# commented this out because this is redundant from the context dict
-# in group_detail_view
-
-
 @login_required
-def group_members_index_view(request):
-    members = UserProfile.objects.all()
-    context = {"members": members}
-    return render(request, "group_detail.html", context)
-
-
-# should I just add this to the group_detail_view? thinking that
-# I should just add this query into the context dict there
-
-
-@login_required
-def group_detail(request, group_id):
-    group = Group.objects.get(pk=group_id)
-    posts = Post.objects.filter(group=group)
-
-    if request.method == "POST":
+def group_detail(request, pk):
+    group = get_object_or_404(Group, pk=pk)
+    post = Post.objects.all(pk=group.id)
+    member = UserProfile.objects.all()
+    context = {
+        "group": group,
+        "post": post,
+        "members": member,
+    }
+    if request.metthod == "POST":
         form = GroupPostForm(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
@@ -50,34 +35,25 @@ def group_detail(request, group_id):
             post.save()
             messages.success(request, "Post Added!")
             form = GroupPostForm()
-    else:
-        form = GroupPostForm()
-
-    context = {
-        "form": form,
-        "posts": posts,
-    }
-    return render(request, "group_detail.html", context)
+            return render(request, "group_detail.html", context)
+        else:
+            form = GroupPostForm()
+        return render(request, "group_detail.html", {"form": form})
 
 
 @login_required
-def show_post(request, post_id):
-    pass
-
-
-@login_required
-def group_create_post_comment_view(request, post_id):
+def group_show_post(request, post_id):
     post = Post.objects.get(pk=post_id)
-    # TODO: do the same as group_create_post_view
     if request.method == "POST":
         form = GroupPostCommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
             comment.post = post
-            comment.author = request.user
-            comment.save()
-            messages.success(request, "Comment added!")
-            return redirect("groups:group_detail", comment.id)
+            post.author = request.user
+            post.save()
+            messages.success(request, "Post Added!")
+            comment = GroupPostCommentForm()
+            return redirect("groups:show_post", post.id)
     else:
         form = GroupPostCommentForm()
     return render(request, "group_detail.html", {"form": form})
