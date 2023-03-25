@@ -59,6 +59,9 @@ class Comment(models.Model):
     added = models.DateTimeField(auto_now_add=True, null=False, blank=False)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.content
+
     @property
     def is_post_comment(self):
         return self.post

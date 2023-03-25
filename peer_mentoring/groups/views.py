@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import GroupPostCommentForm, GroupPostForm
-from .models import Group, Post
+from .models import Comment, Group, Post
 
 # Create your views here.
 
@@ -35,7 +35,7 @@ def group_detail(request, pk):
             post.save()
             messages.success(request, "Post Added!")
             form = GroupPostForm()
-            return render(request, "group_detail.html", context)
+            return render(request, "group_detail.html", context, form)
         else:
             form = GroupPostForm()
         return render(request, "group_detail.html", {"form": form})
@@ -44,6 +44,11 @@ def group_detail(request, pk):
 @login_required
 def group_show_post(request, post_id):
     post = Post.objects.get(pk=post_id)
+    comment = Comment.objects.all(pk=post.id)
+    context = {
+        "post": post,
+        "comment": comment,
+    }
     if request.method == "POST":
         form = GroupPostCommentForm(request.POST)
         if form.is_valid():
@@ -52,8 +57,8 @@ def group_show_post(request, post_id):
             post.author = request.user
             post.save()
             messages.success(request, "Post Added!")
-            comment = GroupPostCommentForm()
-            return redirect("groups:show_post", post.id)
+            form = GroupPostCommentForm()
+            return redirect("groups:show_post", post.id, context, form)
     else:
         form = GroupPostCommentForm()
     return render(request, "group_detail.html", {"form": form})
