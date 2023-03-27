@@ -1,7 +1,7 @@
 from account_management.models import UserProfile
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, render
 
 from .forms import GroupPostCommentForm, GroupPostForm
 from .models import Comment, Group, Post
@@ -58,7 +58,7 @@ def group_show_post(request, post_id):
             post.save()
             messages.success(request, "Post Added!")
             form = GroupPostCommentForm()
-            return redirect("groups:show_post", post.id, context, form)
+            return render(request, "group_show_post.html", post.id, context, form)
     else:
         form = GroupPostCommentForm()
-    return render(request, "group_detail.html", {"form": form})
+    return render(request, "group_show_post.html", {"form": form})
