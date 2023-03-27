@@ -19,7 +19,7 @@ def group_index(request):
 @login_required
 def group_detail(request, pk):
     group = get_object_or_404(Group, pk=pk)
-    post = Post.objects.all(pk=group.id)
+    post = Post.objects.filte(pk=group.id)
     member = UserProfile.objects.all()
     form = GroupPostForm(request.POST)
     context = {
@@ -44,7 +44,7 @@ def group_detail(request, pk):
 @login_required
 def group_show_post(request, post_id):
     post = Post.objects.get(pk=post_id)
-    comment = Comment.objects.all(pk=post.id)
+    comment = Comment.objects.filter(pk=post.id)
     form = GroupPostCommentForm(request.POST)
     context = {
         "post": post,
