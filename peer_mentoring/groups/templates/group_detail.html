@@ -4,11 +4,12 @@
   {% for post in posts %}
     <p><a href="{% url "groups:show_post" post.id %}">{{post.title}}</a></p>
   {% endfor %}
-
-  <!-- todo: put in new template -->
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="add">
-  </form>
+  {% if post not in posts %}
+    <h2>Create New Post!</h2>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" value="add">
+    </form>
+  {% endif %}
 {% endblock %}
