@@ -58,7 +58,7 @@ def group_show_post(request, post_id):
             post.save()
             messages.success(request, "Post Added!")
             form = GroupPostCommentForm()
-            return render(request, "group_show_post.html", post.id, context, form)
+            return render(request, "group_show_post.html", context, form)
     else:
         form = GroupPostCommentForm()
     return render(request, "group_show_post.html", {"form": form})
