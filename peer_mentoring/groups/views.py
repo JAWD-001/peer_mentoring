@@ -1,4 +1,4 @@
-from account_management.models import UserProfile
+from account_management.models import UserProfile, UserProile
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
@@ -13,7 +13,39 @@ from .models import Comment, Group, Post
 def group_index(request):
     groups = Group.objects.all()
     context = {"groups": groups}
-    return render(request, "groups_index.html", context)
+    return render(request, "groups_home.html", context)
+
+
+@login_required
+def join_group(request, group_id, userprofile):
+    group = Group.objects.get(pk=group_id)
+    user = UserProile.objects.get(request.user)
+    context = {
+        "group": group,
+        "user": user,
+    }
+    if request.method == "POST":
+        user.groups_joined.add(group_id)
+        user.save()
+        return redirect("groups:group_detail", group_id)
+    else:
+        return render(request, "group_detail.html", context)
+
+
+@login_required
+def leave_group(request, group_id):
+    group = Group.objects.get(pk=group_id)
+    user = UserProile.objects.get(request.user)
+    context = {
+        "group": group,
+        "user": user,
+    }
+    if request.method == "POST":
+        if group in user.groups_joined:
+            user.groups_joined.remove(group_id)
+            return redirect("groups:group_home")
+        else:
+            return render(request, context)
 
 
 @login_required
