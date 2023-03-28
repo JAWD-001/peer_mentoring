@@ -20,7 +20,7 @@ class GroupAdmin(admin.ModelAdmin):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ("author", "title", "content", "added", "group")
+    list_display = ("id", "author", "title", "content", "added", "group")
 
 
 @admin.register(Comment)

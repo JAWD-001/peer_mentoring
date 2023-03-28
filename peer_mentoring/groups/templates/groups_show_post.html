@@ -11,16 +11,4 @@
         <h4>{{post.content}}</h4>
     </div>
 
-    {% if comment in comments %}
-        {% for comment in comments %}
-            <p>{{comment}}</p>
-        {% endfor %}
-    {% endif %}
-        <div class="comment-form">
-            <form method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <input type="submit" value="add">
-            </form>
-        </div>
 {% endblock %}

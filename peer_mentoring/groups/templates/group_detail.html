@@ -5,9 +5,4 @@
     <p><a href="{% url 'groups:show_post' post.id %}">{{post.title}}</a></p>
   {% endfor %}
     <h2>Create New Post!</h2>
-    <form method="post">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <input type="submit" value="add">
-    </form>
 {% endblock %}

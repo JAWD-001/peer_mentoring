@@ -1,7 +1,7 @@
 from account_management.models import UserProfile
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import GroupPostCommentForm, GroupPostForm
 from .models import Comment, Group, Post
@@ -17,34 +17,39 @@ def group_index(request):
 
 
 @login_required
-def group_detail(request, pk):
-    group = get_object_or_404(Group, pk=pk)
-    post = Post.objects.filte(pk=group.id)
+def group_detail(request, group_id):
+    group = get_object_or_404(Group, pk=group_id)
+    post = Post.objects.filter(id=group_id)
     member = UserProfile.objects.all()
-    form = GroupPostForm(request.POST)
     context = {
         "group": group,
         "post": post,
         "members": member,
-        "form": form,
     }
-    if request.metthod == "POST":
+    return render(request, "group_detail.html", context)
+
+
+def create_group_post(request, group_id):
+    group = Group.objects.get(pk=group_id)
+    form = GroupPostForm()
+    if request.method == "POST":
+        form = GroupPostForm(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
             post.group = group
             post.author = request.user
             post.save()
             messages.success(request, "Post Added!")
-            return render(request, "group_detail.html", context)
+            return redirect("groups:group_detail", group_id)
         else:
             form = GroupPostForm()
-        return render(request, "group_detail.html", {"form": form})
+    return render(request, "create_group_post.html", {"form": form})
 
 
 @login_required
-def group_show_post(request, post_id):
-    post = Post.objects.get(pk=post_id)
-    comment = Comment.objects.filter(pk=post.id)
+def group_show_post(request, group_id, post_id):
+    post = Post.objects.filter(pk=group_id)
+    comment = Comment.objects.filter(pk=post_id)
     form = GroupPostCommentForm(request.POST)
     context = {
         "post": post,
@@ -58,7 +63,7 @@ def group_show_post(request, post_id):
             post.author = request.user
             post.save()
             messages.success(request, "Post Added!")
-            return render(request, "group_show_post.html", context)
+            return render(request, "groups_show_post.html", context)
     else:
         form = GroupPostCommentForm()
-    return render(request, "group_show_post.html", {"form": form})
+    return render(request, "groups_show_post.html", {"form": form})
