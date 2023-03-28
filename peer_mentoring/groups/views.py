@@ -20,13 +20,13 @@ def group_index(request):
 def create_group(request):
     form = CreateGroupForm()
     if request.method == "POST":
-        new_group = CreateGroupForm()
+        new_group = CreateGroupForm(request.POST)
         if form.is_valid():
             new_group.save()
             messages.success(request, "Group Added!")
             return redirect("groups:groups_home")
         else:
-            GroupPostForm()
+            CreateGroupForm()
         return render(request, "group_index.html", {"new_group": new_group})
 
 
