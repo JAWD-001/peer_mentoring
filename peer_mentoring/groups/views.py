@@ -50,7 +50,7 @@ def create_group_post(request, group_id):
 def group_show_post(request, group_id, post_id):
     post = Post.objects.filter(pk=group_id)
     comment = Comment.objects.filter(pk=post_id)
-    form = GroupPostCommentForm(request.POST)
+    form = GroupPostCommentForm()
     context = {
         "post": post,
         "comment": comment,
@@ -60,8 +60,8 @@ def group_show_post(request, group_id, post_id):
         if form.is_valid():
             comment = form.save(commit=False)
             comment.post = post
-            post.author = request.user
-            post.save()
+            comment.author = request.user
+            comment.save()
             messages.success(request, "Post Added!")
             return render(request, "groups_show_post.html", context)
     else:
