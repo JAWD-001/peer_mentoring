@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import GroupPostCommentForm, GroupPostForm
+from .forms import CreateGroupForm, GroupPostCommentForm, GroupPostForm
 from .models import Comment, Group, Post
 
 # Create your views here.
@@ -14,6 +14,20 @@ def group_index(request):
     groups = Group.objects.all()
     context = {"groups": groups}
     return render(request, "groups_index.html", context)
+
+
+@login_required
+def create_group(request):
+    form = CreateGroupForm()
+    if request.method == "POST":
+        new_group = CreateGroupForm()
+        if form.is_valid():
+            new_group.save()
+            messages.success(request, "Group Added!")
+            return redirect("groups:groups_home")
+        else:
+            GroupPostForm()
+        return render(request, "group_index.html", {"new_group": new_group})
 
 
 @login_required
