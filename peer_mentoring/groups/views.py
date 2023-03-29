@@ -75,6 +75,7 @@ def group_detail(request, group_id):
     return render(request, "group_detail.html", context)
 
 
+@login_required
 def create_group_post(request, group_id):
     group = Group.objects.get(pk=group_id)
     form = GroupPostForm()
