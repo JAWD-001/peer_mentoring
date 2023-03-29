@@ -11,7 +11,7 @@ from .views import (
 app_name = "groups"
 
 urlpatterns = [
-    path("", group_index, name="groups_home"),
+    path("", group_index, name="group_home"),
     path("create_group", create_group, name="create_group"),
     path("<int:group_id>/", group_detail, name="group_detail"),
     path("<int:group_id>/posts/<int:post_id>/", group_show_post, name="show_post"),

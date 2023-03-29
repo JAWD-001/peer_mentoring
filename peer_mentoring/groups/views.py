@@ -17,7 +17,7 @@ def group_index(request):
 
 
 @login_required
-def join_group(request, group_id, userprofile):
+def join_group(request, group_id):
     group = Group.objects.get(pk=group_id)
     user = UserProfile.objects.get(request.user)
     context = {

@@ -14,7 +14,7 @@ def home(request):
 def view_profile(request, user_id):
     user = UserProfile.objects.get(pk=user_id)
     context = {"user": user}
-    return render(request, context)
+    return render(request, "user_profile.html", context)
 
 
 def create_user(request):
