@@ -1,9 +1,7 @@
 from django.urls import path
 
-from .views import home, create_user
+from .views import home
 
-app_name = 'account_management'
+app_name = "account_management"
 
-urlpatterns = [
-    path('', home)
-]
+urlpatterns = [path("", home, name="home")]

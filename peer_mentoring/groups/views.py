@@ -1,4 +1,4 @@
-from account_management.models import UserProfile, UserProile
+from account_management.models import UserProfile
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
@@ -19,7 +19,7 @@ def group_index(request):
 @login_required
 def join_group(request, group_id, userprofile):
     group = Group.objects.get(pk=group_id)
-    user = UserProile.objects.get(request.user)
+    user = UserProfile.objects.get(request.user)
     context = {
         "group": group,
         "user": user,
@@ -35,7 +35,7 @@ def join_group(request, group_id, userprofile):
 @login_required
 def leave_group(request, group_id):
     group = Group.objects.get(pk=group_id)
-    user = UserProile.objects.get(request.user)
+    user = UserProfile.objects.get(request.user)
     context = {
         "group": group,
         "user": user,
