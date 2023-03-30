@@ -12,8 +12,16 @@ from .models import Comment, Group, Post
 @login_required
 def group_index(request):
     groups = Group.objects.all()
-    context = {"groups": groups}
-    return render(request, "groups_home.html", context)
+    form = CreateGroupForm()
+    if request.method == "POST":
+        form = CreateGroupForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Group Added!")
+            return redirect("groups:group_home")
+
+    context = {"groups": groups, "form": form}
+    return render(request, "groups_index.html", context)
 
 
 @login_required
@@ -46,20 +54,6 @@ def leave_group(request, group_id):
             return redirect("groups:group_home")
         else:
             return render(request, context)
-
-
-@login_required
-def create_group(request):
-    form = CreateGroupForm()
-    if request.method == "POST":
-        new_group = CreateGroupForm(request.POST)
-        if form.is_valid():
-            new_group.save()
-            messages.success(request, "Group Added!")
-            return redirect("groups:groups_home")
-        else:
-            CreateGroupForm()
-        return render(request, "group_index.html", {"new_group": new_group})
 
 
 @login_required
