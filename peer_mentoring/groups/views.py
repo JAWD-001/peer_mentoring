@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import GroupPostCommentForm, GroupPostForm
+from .forms import CreateGroupForm, GroupPostCommentForm, GroupPostForm
 from .models import Comment, Group, Post
 
 # Create your views here.
@@ -12,8 +12,48 @@ from .models import Comment, Group, Post
 @login_required
 def group_index(request):
     groups = Group.objects.all()
-    context = {"groups": groups}
+    form = CreateGroupForm()
+    if request.method == "POST":
+        form = CreateGroupForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Group Added!")
+            return redirect("groups:group_home")
+
+    context = {"groups": groups, "form": form}
     return render(request, "groups_index.html", context)
+
+
+@login_required
+def join_group(request, group_id):
+    group = Group.objects.get(pk=group_id)
+    user = UserProfile.objects.get(request.user)
+    context = {
+        "group": group,
+        "user": user,
+    }
+    if request.method == "POST":
+        user.groups_joined.add(group_id)
+        user.save()
+        return redirect("groups:group_detail", group_id)
+    else:
+        return render(request, "group_detail.html", context)
+
+
+@login_required
+def leave_group(request, group_id):
+    group = Group.objects.get(pk=group_id)
+    user = UserProfile.objects.get(request.user)
+    context = {
+        "group": group,
+        "user": user,
+    }
+    if request.method == "POST":
+        if group in user.groups_joined:
+            user.groups_joined.remove(group_id)
+            return redirect("groups:group_home")
+        else:
+            return render(request, context)
 
 
 @login_required
@@ -29,6 +69,7 @@ def group_detail(request, group_id):
     return render(request, "group_detail.html", context)
 
 
+@login_required
 def create_group_post(request, group_id):
     group = Group.objects.get(pk=group_id)
     form = GroupPostForm()

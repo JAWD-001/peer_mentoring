@@ -1,6 +1,17 @@
 from django.forms import ModelForm
 
-from .models import Comment, Post
+from .models import Category, Comment, Group, Post
+
+
+class CreateGroupCategory(ModelForm):
+    model = Category
+    fields = ["name"]
+
+
+class CreateGroupForm(ModelForm):
+    class Meta:
+        model = Group
+        fields = ["title", "avatar", "description", "category"]
 
 
 class GroupPostForm(ModelForm):
