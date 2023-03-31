@@ -59,20 +59,15 @@ def leave_group(request, group_id):
 @login_required
 def group_detail(request, group_id):
     group = get_object_or_404(Group, pk=group_id)
-    post = Post.objects.filter(id=group_id)
+    posts = Post.objects.filter(pk=group_id)
     member = UserProfile.objects.all()
+    form = GroupPostForm()
     context = {
         "group": group,
-        "post": post,
+        "post": posts,
         "members": member,
+        "form": form,
     }
-    return render(request, "group_detail.html", context)
-
-
-@login_required
-def create_group_post(request, group_id):
-    group = Group.objects.get(pk=group_id)
-    form = GroupPostForm()
     if request.method == "POST":
         form = GroupPostForm(request.POST)
         if form.is_valid():
@@ -84,7 +79,7 @@ def create_group_post(request, group_id):
             return redirect("groups:group_detail", group_id)
         else:
             form = GroupPostForm()
-    return render(request, "create_group_post.html", {"form": form})
+    return render(request, "group_detail.html", context)
 
 
 @login_required

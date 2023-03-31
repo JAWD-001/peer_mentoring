@@ -1,11 +1,41 @@
 {% extends 'base.html' %}
+{% load bootstrap5 %}
 
 {% block content %}
   {% for post in posts %}
     <p><a href="{% url 'groups:show_post' post.id %}">{{post.title}}</a></p>
   {% endfor %}
-    <h2>Create New Post!</h2>
+
     <div class="link">
-      <p><a href="{% url 'chat:group_chat_room' group.id %}">Chat here!</a></p>
+        <button><a href="{% url 'chat:group_chat_room' group.id %}">Chat here!</a></button>
     </div>
+
+
+
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Create a New Post
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New Post Form</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="post" action="" id="group_create">
+          {% csrf_token %}
+          {% bootstrap_form form %}
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" form_id="group_create">Create Post</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock %}
