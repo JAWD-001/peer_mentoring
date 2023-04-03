@@ -1,3 +1,39 @@
-{% for group in groups %}
-  {{ group }}
-{% endfor %}
+{% extends "base.html" %}
+{% load bootstrap5 %}
+
+{% block content %}
+  <ul>
+  {% for group in groups %}
+    <a href="{% url 'groups:group_detail' group.id %}"><li>{{ group }}</li></a>
+  {% endfor %}
+  </ul>
+
+
+  <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Create a New Group
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New Group Form</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="post" action="" id="group_create">
+          {% csrf_token %}
+          {% bootstrap_form form %}
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" form_id="group_create">Create Group</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

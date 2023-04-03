@@ -1,24 +1,20 @@
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
-from django.contrib.auth.views import (
-    LoginView,
-    LogoutView,
-    PasswordResetCompleteView,
-    PasswordResetConfirmView,
-    PasswordResetDoneView,
-    PasswordResetView,
-)
 from django.shortcuts import redirect, render
-from django.urls import reverse_lazy
-from django.views.generic import CreateView
 
-from .forms import CreateUserForm, LoginForm, ResetPasswordForm
+from .forms import CreateUserForm, LoginForm
+from .models import UserProfile
 
 # Create your views here.
 
 
 def home(request):
     return render(request, "account_management/home.html")
+
+
+def view_profile(request, user_id):
+    user = UserProfile.objects.get(pk=user_id)
+    context = {"user": user}
+    return render(request, "user_profile.html", context)
 
 
 def create_user(request):
