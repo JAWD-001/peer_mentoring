@@ -73,12 +73,12 @@ def leave_group(request, group_id):
 @login_required
 def group_detail(request, group_id):
     group = get_object_or_404(Group, pk=group_id)
-    posts = Post.objects.filter(pk=group_id)
+    posts = Post.objects.filter(group=group_id)
     member = UserProfile.objects.all()
     form = GroupPostForm()
     context = {
         "group": group,
-        "post": posts,
+        "posts": posts,
         "members": member,
         "form": form,
     }
