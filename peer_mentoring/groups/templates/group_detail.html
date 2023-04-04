@@ -7,7 +7,7 @@
   {% endfor %}
 
     <div class="link">
-        <button><a href="{% url 'chat:group_chat_room' group.id %}">Chat here!</a></button>
+        <a class="btn btn-primary" href="{% url 'chat:group_chat_room' group.id %}">Chat here!</a></button>
     </div>
 
 
