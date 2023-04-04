@@ -2,7 +2,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect, render
 
 from .forms import CreateUserForm, LoginForm
-from .models import UserProfile
 
 # Create your views here.
 
@@ -12,7 +11,7 @@ def home(request):
 
 
 def view_profile(request, user_id):
-    user = UserProfile.objects.get(pk=user_id)
+    user = request.user
     context = {"user": user}
     return render(request, "user_profile.html", context)
 
