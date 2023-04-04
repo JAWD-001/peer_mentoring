@@ -19,9 +19,23 @@ def group_index(request):
             form.save()
             messages.success(request, "Group Added!")
             return redirect("groups:group_home")
-
     context = {"groups": groups, "form": form}
     return render(request, "groups_index.html", context)
+
+
+"""
+@login_required
+def groups_joined(request):
+    groups = Group.objects.filter(request.user)
+    context = {
+        "groups": groups,
+    }
+    if request.method == "GET":
+        if request.user in groups:
+            return render(request, "groups_joined.html", context)
+        else:
+            return redirect(request, "groups:group_home")
+"""
 
 
 @login_required
