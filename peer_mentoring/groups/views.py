@@ -26,7 +26,7 @@ def group_index(request):
 """
 @login_required
 def groups_joined(request):
-    groups = Group.objects.filter(request.user)
+    groups = request.user.groups_joined
     context = {
         "groups": groups,
     }

@@ -44,6 +44,9 @@ class Post(models.Model):
     added = models.DateTimeField(auto_now_add=True, null=False, blank=False)
     group = models.ForeignKey(Group, on_delete=models.CASCADE, blank=True, null=True)
 
+    def __str__(self):
+        return self.title
+
     @property
     def is_group_post(self):
         return self.group is not None
