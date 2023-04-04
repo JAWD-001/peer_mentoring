@@ -4,7 +4,7 @@
 {% block content %}
 
   {% for post in posts %}
-    <p><a href="{% url 'groups:show_post' post.g %}">{{post}}</a></p>
+    <p><a href="{% url 'groups:show_post' post.id %}">{{post}}</a></p>
   {% endfor %}
 
     <div class="link">

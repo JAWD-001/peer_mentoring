@@ -90,7 +90,7 @@ def group_detail(request, group_id):
             post.author = request.user
             post.save()
             messages.success(request, "Post Added!")
-            return redirect("groups:group_detail", group_id)
+            return redirect("groups:group_detail", group_id, context)
         else:
             form = GroupPostForm()
     return render(request, "group_detail.html", context)
