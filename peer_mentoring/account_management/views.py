@@ -10,7 +10,7 @@ def home(request):
     return render(request, "account_management/home.html")
 
 
-def view_profile(request, user_id):
+def view_profile(request):
     user = request.user
     context = {"user": user}
     return render(request, "user_profile.html", context)

@@ -23,6 +23,8 @@ def group_index(request):
     return render(request, "groups_index.html", context)
 
 
+# broken, need help.
+# error: The QuerySet value for an exact lookup must be limited to one result using slicing.
 @login_required
 def groups_joined(request):
     group_id = Group.objects.all()
