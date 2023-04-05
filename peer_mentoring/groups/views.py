@@ -23,19 +23,18 @@ def group_index(request):
     return render(request, "groups_index.html", context)
 
 
-"""
 @login_required
 def groups_joined(request):
-    groups = request.user.groups_joined
+    group_id = Group.objects.all()
+    groups = UserProfile.objects.filter(groups_joined=group_id)
     context = {
         "groups": groups,
     }
     if request.method == "GET":
-        if request.user in groups:
+        if group_id in groups:
             return render(request, "groups_joined.html", context)
         else:
             return redirect(request, "groups:group_home")
-"""
 
 
 @login_required
