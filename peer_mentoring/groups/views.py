@@ -23,33 +23,26 @@ def group_index(request):
     return render(request, "groups_index.html", context)
 
 
-# broken, need help.
-# error: The QuerySet value for an exact lookup must be limited to one result using slicing.
 @login_required
 def groups_joined(request):
-    group_id = Group.objects.all()
-    groups = UserProfile.objects.filter(groups_joined=group_id)
+    groups = request.user.userprofile.groups_joined.all()
     context = {
         "groups": groups,
     }
-    if request.method == "GET":
-        if group_id in groups:
-            return render(request, "groups_joined.html", context)
-        else:
-            return redirect(request, "groups:group_home")
+    return render(request, "groups_joined.html", context)
 
 
 @login_required
 def join_group(request, group_id):
     group = Group.objects.get(pk=group_id)
-    user = UserProfile.objects.get(request.user)
+    userprofile = request.user.userprofile
     context = {
         "group": group,
-        "user": user,
     }
     if request.method == "POST":
-        user.groups_joined.add(group_id)
-        user.save()
+        userprofile.groups_joined.add(group_id)
+        # TODO do we need the save()
+        userprofile.save()
         return redirect("groups:group_detail", group_id)
     else:
         return render(request, "group_detail.html", context)
@@ -91,7 +84,7 @@ def group_detail(request, group_id):
             post.author = request.user
             post.save()
             messages.success(request, "Post Added!")
-            return redirect("groups:group_detail", group_id, context)
+            return redirect("groups:group_detail", group_id)
         else:
             form = GroupPostForm()
     return render(request, "group_detail.html", context)
@@ -99,14 +92,9 @@ def group_detail(request, group_id):
 
 @login_required
 def group_show_post(request, group_id, post_id):
-    post = Post.objects.get(id=group_id)
+    group = Group.objects.get(id=group_id)
+    post = Post.objects.get(id=post_id, group=group)
     comment = Comment.objects.filter(pk=post_id)
-    form = GroupPostCommentForm()
-    context = {
-        "post": post,
-        "comment": comment,
-        "form": form,
-    }
     if request.method == "POST":
         form = GroupPostCommentForm(request.POST)
         if form.is_valid():
@@ -115,7 +103,12 @@ def group_show_post(request, group_id, post_id):
             comment.author = request.user
             comment.save()
             messages.success(request, "Comment Added!")
-            return render(request, "groups_show_post.html", context)
     else:
         form = GroupPostCommentForm()
-    return render(request, "groups_show_post.html", {"form": form})
+    context = {
+        "group": group,
+        "post": post,
+        "comment": comment,
+        "form": form,
+    }
+    return render(request, "groups_show_post.html", context)

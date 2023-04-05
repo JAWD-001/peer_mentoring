@@ -6,5 +6,5 @@ app_name = "account_management"
 
 urlpatterns = [
     path("", home, name="home"),
-    path("profile/<int:user_id>", view_profile, name="profile_home"),
+    path("profile", view_profile, name="profile_home"),
 ]
