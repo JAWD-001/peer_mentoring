@@ -14,9 +14,9 @@
 <h2>Man+</h2>
 
 {% if request.user.is_authenticated %}
-Welcome back {{request.user.username}} <a href="{% url 'account_logout' %}">logout</a>
-{% else %}}
-Hey stranger, <a href="{% url 'account_login' %}">login</a>
+  Welcome back {{request.user.username}} <a href="{% url 'account_logout' %}">logout</a>
+{% else %}
+  splash page here
 {% endif %}
 
 {% endblock %}

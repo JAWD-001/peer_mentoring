@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
 from .forms import CreateUserForm, LoginForm
@@ -10,8 +11,10 @@ def home(request):
     return render(request, "account_management/home.html")
 
 
+@login_required
 def view_profile(request):
     user = request.user
+    # TODO: pass in a model form and handle post submission
     context = {"user": user}
     return render(request, "user_profile.html", context)
 
