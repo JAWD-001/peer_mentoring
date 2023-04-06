@@ -16,6 +16,11 @@ def group_index(request):
     if request.method == "POST":
         form = CreateGroupForm(request.POST)
         if form.is_valid():
+            """
+            group = form.save(commit=False)
+            group.mod = request.user
+            group.save()
+            """
             form.save()
             messages.success(request, "Group Added!")
             return redirect("groups:group_home")

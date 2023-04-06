@@ -1,8 +1,9 @@
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
-from .forms import CreateUserForm, LoginForm
+from .forms import AddPhotoForm, CreateUserForm, CustomUserChangeForm, LoginForm
 
 # Create your views here.
 
@@ -14,8 +15,27 @@ def home(request):
 @login_required
 def view_profile(request):
     user = request.user
-    # TODO: pass in a model form and handle post submission
-    context = {"user": user}
+    form = CustomUserChangeForm()
+    photo_upload = AddPhotoForm()
+    if request.method == "POST":
+        if form in request.POST:
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Profile Updated!")
+        if photo_upload in request.POST:
+            if form.is_valid():
+                image = form.save(commit=False)
+                image.user = request.user
+                image.save()
+                messages.success(request, "Image Uploaded!")
+        else:
+            form = CustomUserChangeForm()
+            photo_upload = AddPhotoForm()
+    context = {
+        "user": user,
+        "form": form,
+        "photo_upload": photo_upload,
+    }
     return render(request, "user_profile.html", context)
 
 
