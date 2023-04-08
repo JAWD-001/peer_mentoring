@@ -17,9 +17,9 @@ def group_index(request):
         form = CreateGroupForm(request.POST)
         if form.is_valid():
             """
-            group = form.save(commit=False)
-            group.mod = request.user
-            group.save()
+            group_mod = form.save(commit=False)
+            group_mod.groups_moderated = request.user
+            group_mod.save()
             """
             form.save()
             messages.success(request, "Group Added!")
