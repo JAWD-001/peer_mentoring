@@ -38,6 +38,15 @@ def groups_joined(request):
 
 
 @login_required
+def groups_moderated(request):
+    groups = request.user.userprofile.groups_moderated.all()
+    context = {
+        "groups": groups,
+    }
+    return render(request, "groups_moderated.html", context)
+
+
+@login_required
 def join_group(request, group_id):
     group = Group.objects.get(pk=group_id)
     userprofile = request.user.userprofile
