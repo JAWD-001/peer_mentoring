@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
+from groups.models import Comment, Post
 
 from .forms import AddPhotoForm, CreateUserForm, CustomUserChangeForm, LoginForm
 
@@ -17,6 +18,8 @@ def view_profile(request):
     user = request.user
     form = CustomUserChangeForm()
     photo_upload = AddPhotoForm()
+    recent_posts = Post.objects.filter(author=user).order_by("added")[-10:-1]
+    recent_comments = Comment.objects.filter(author=user).order_by("added")[-10:-1]
     if request.method == "POST":
         if form in request.POST:
             if form.is_valid():
@@ -35,6 +38,8 @@ def view_profile(request):
         "user": user,
         "form": form,
         "photo_upload": photo_upload,
+        "recent_posts": recent_posts,
+        "recent_comments": recent_comments,
     }
     return render(request, "user_profile.html", context)
 
