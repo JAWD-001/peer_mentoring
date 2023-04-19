@@ -2,11 +2,27 @@
 {% load bootstrap5 %}
 
 {% block content %}
-  <ul>
+  <div class="group-index-list">
   {% for group in groups %}
-    <a href="{% url 'groups:group_detail' group.id %}"><li>{{ group }}</li></a>
+    <div class="card" style="width: 18rem;">
+      <img src="{{group.avatar}}" class="card-img-top" alt="...">
+      <div class="card-body">
+        <p class="card-text">{{group.description}}</p>
+      </div>
+    </div>
+
+    <ol class="list-group list-group-numbered">
+      <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="ms-2 me-auto">
+          <div class="fw-bold"><a href="{% url 'groups:group_detail' group.id %}">{{ group }}</a></div>
+            {{group.description}}
+        </div>
+        <span class="badge bg-primary rounded-pill">14</span>
+      </li>
+    </ol>
+      <a href="{% url 'groups:group_detail' group.id %}"><li>{{ group }}</li></a>
   {% endfor %}
-  </ul>
+  </div>
 
 
   <!-- Button trigger modal -->

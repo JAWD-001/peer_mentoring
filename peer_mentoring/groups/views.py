@@ -83,6 +83,7 @@ def group_detail(request, group_id):
     group = get_object_or_404(Group, pk=group_id)
     posts = Post.objects.filter(group=group_id)
     member = UserProfile.objects.all()
+    # or member = UserProfile.objects.filter(groups_joined=group_id)
     form = GroupPostForm()
     context = {
         "group": group,
