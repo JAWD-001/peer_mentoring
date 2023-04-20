@@ -62,4 +62,27 @@
 
 <li><a href="{% url 'account_email' %}">Change E-mail</a></li>
 <li><a href="{% url 'account_change_password' %}">Change Password</a></li>
+{% if post in recent_posts %}
+<div class="list-group">
+  <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">List group item heading</h5>
+      <small>3 days ago</small>
+    </div>
+    <p class="mb-1">Some placeholder content in a paragraph.</p>
+    <small>And some small print.</small>
+  </a>
+  {% endif %}
+
+  {% if comment in recent_comments %}
+  <div class="list-group">
+  <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">List group item heading</h5>
+      <small>3 days ago</small>
+    </div>
+    <p class="mb-1">Some placeholder content in a paragraph.</p>
+    <small>And some small print.</small>
+  </a>
+    {% endif %}
 {% endblock %}

@@ -18,8 +18,10 @@ def view_profile(request):
     user = request.user
     form = CustomUserChangeForm()
     photo_upload = AddPhotoForm()
-    recent_posts = Post.objects.filter(author=user).order_by("added")[-10:-1]
-    recent_comments = Comment.objects.filter(author=user).order_by("added")[-10:-1]
+    recent_posts = Post.objects.filter(author=user).order_by("added").reverse()[0:9]
+    recent_comments = (
+        Comment.objects.filter(author=user).order_by("added").reverse()[0:9]
+    )
     if request.method == "POST":
         if form in request.POST:
             if form.is_valid():
