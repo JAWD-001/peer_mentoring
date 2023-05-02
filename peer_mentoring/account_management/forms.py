@@ -82,6 +82,10 @@ class AddPhotoForm(models.ModelForm):
         fields = ["image", "description"]
 
 
+class AddFriendForm(models.Model):
+    user_id = forms.IntegerField(widget=forms.HiddenInput())
+
+
 class ResetPasswordForm(PasswordResetForm):
     email = forms.EmailField(widget=forms.TextInput(attrs={"placeholder": "Email"}))
 

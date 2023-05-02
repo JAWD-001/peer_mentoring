@@ -1,10 +1,17 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from groups.models import Comment, Post
 
-from .forms import AddPhotoForm, CreateUserForm, CustomUserChangeForm, LoginForm
+from .forms import (
+    AddFriendForm,
+    AddPhotoForm,
+    CreateUserForm,
+    CustomUserChangeForm,
+    LoginForm,
+)
+from .models import UserProfile
 
 # Create your views here.
 
@@ -47,6 +54,30 @@ def view_profile(request):
         "photo_upload": photo_upload,
         "recent_posts": recent_posts,
         "recent_comments": recent_comments,
+    }
+    return render(request, "user_profile.html", context)
+
+
+def add_friend(request, user_id):
+    user = get_object_or_404(UserProfile, id=user_id)
+    posts = Post.objects.filter(user=user)
+    comments = Comment.objects.filter(user=user)
+
+    if request.method == "POST":
+        form = AddFriendForm(request.POST)
+        if form.is_valid():
+            friend = get_object_or_404(UserProfile, id=form.cleaned_data[user_id])
+            request.user.friends.add(friend)
+            request.user.save()
+            return redirect("user_profile", user_id=user_id)
+    else:
+        form = AddFriendForm(initial={"user_id": user.id})
+
+    context = {
+        "user": user,
+        "posts": posts,
+        "comments": comments,
+        "form": form,
     }
     return render(request, "user_profile.html", context)
 
