@@ -21,11 +21,11 @@ def home(request):
 
 
 @login_required
-def view_profile(request):
+def profile_home(request):
     user = request.user
     form = CustomUserChangeForm()
     photo_upload = AddPhotoForm()
-    # user_photos = Photo.objects.filter(user=request.user)
+    # user_photos = Photo.objects.filter(user=user)
     recent_posts = Post.objects.filter(author=user).order_by("added").reverse()[0:9]
     recent_comments = (
         Comment.objects.filter(author=user).order_by("added").reverse()[0:9]
@@ -58,7 +58,7 @@ def view_profile(request):
     return render(request, "user_profile.html", context)
 
 
-def add_friend(request, user_id):
+def view_profile(request, user_id):
     user = get_object_or_404(UserProfile, id=user_id)
     posts = Post.objects.filter(user=user)
     comments = Comment.objects.filter(user=user)
