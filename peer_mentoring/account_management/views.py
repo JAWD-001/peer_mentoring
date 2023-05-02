@@ -18,24 +18,29 @@ def view_profile(request):
     user = request.user
     form = CustomUserChangeForm()
     photo_upload = AddPhotoForm()
+    # user_photos = Photo.objects.filter(user=request.user)
     recent_posts = Post.objects.filter(author=user).order_by("added").reverse()[0:9]
     recent_comments = (
         Comment.objects.filter(author=user).order_by("added").reverse()[0:9]
     )
     if request.method == "POST":
-        if form in request.POST:
+        if request.FILES:
+            photo_upload = AddPhotoForm(request.POST, request.FILES)
+            if photo_upload.is_valid():
+                photo = photo_upload.save(commit=False)
+                photo.user = request.user
+                photo.save()
+                messages.success(request, "Photo Added!")
+        else:
+            # profile update, the other form on page
+            # update is with instance
+            form = CustomUserChangeForm(request.POST, instance=request.user.userprofile)
             if form.is_valid():
                 form.save()
                 messages.success(request, "Profile Updated!")
-        if photo_upload in request.POST:
-            if form.is_valid():
-                image = form.save(commit=False)
-                image.user = request.user
-                image.save()
-                messages.success(request, "Image Uploaded!")
-        else:
-            form = CustomUserChangeForm()
-            photo_upload = AddPhotoForm()
+    else:
+        form = CustomUserChangeForm()
+        photo_upload = AddPhotoForm()
     context = {
         "user": user,
         "form": form,
