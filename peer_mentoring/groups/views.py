@@ -35,7 +35,7 @@ def group_index(request):
 @login_required
 def groups_joined(request):
     # groups = Group.objects.filter(member=request.user.userprofile)
-    groups = request.user.userprofile.groups_joined.all()
+    groups = Group.objects.filter(members=request.user)
     context = {
         "groups": groups,
     }
@@ -45,7 +45,7 @@ def groups_joined(request):
 @login_required
 def groups_moderated(request):
     # groups = Group.object.filter(moderator=request.user.userprofile)
-    groups = request.user.userprofile.groups_moderated.all()
+    groups = Group.objects.filter(moderator=request.user)
     context = {
         "groups": groups,
     }
