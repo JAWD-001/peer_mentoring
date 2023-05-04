@@ -29,7 +29,7 @@ class Group(models.Model):
     description = models.TextField(max_length=250, blank=False, null=False)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     added = models.DateTimeField(auto_now_add=True, null=False, blank=False)
-    member = models.ForeignKey(user, on_delete=models.CASCADE, related_name="members")
+    members = models.ManyToManyField(user)
     moderator = models.ForeignKey(
         user, on_delete=models.CASCADE, related_name="moderator"
     )

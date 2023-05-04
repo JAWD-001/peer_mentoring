@@ -17,7 +17,7 @@ def group_index(request):
         if "group_id" in request.POST:
             group_id = request.POST.get("group_id")
             group = get_object_or_404(Group, id=group_id)
-            group.members.add("request.user")
+            group.members.add(request.user)
             group.save()
             messages.success(request, "Joined Group!")
             return redirect("groups:group_detail", group_id)
@@ -86,7 +86,7 @@ def leave_group(request, group_id):
 def group_detail(request, group_id):
     group = get_object_or_404(Group, pk=group_id)
     posts = Post.objects.filter(group=group_id)
-    member = Group.members.all()
+    member = group.members.all()
     # UserProfile.objects.filter(groups_joined=group_id)
     form = GroupPostForm()
     context = {
@@ -113,7 +113,7 @@ def group_detail(request, group_id):
 def group_show_post(request, group_id, post_id):
     group = Group.objects.get(id=group_id)
     post = Post.objects.get(id=post_id, group=group)
-    comment = Comment.objects.filter(pk=post_id)
+    comments = Comment.objects.filter(post=post)
     if request.method == "POST":
         form = GroupPostCommentForm(request.POST)
         if form.is_valid():
@@ -127,7 +127,7 @@ def group_show_post(request, group_id, post_id):
     context = {
         "group": group,
         "post": post,
-        "comment": comment,
+        "comments": comments,
         "form": form,
     }
     return render(request, "groups_show_post.html", context)
