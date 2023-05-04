@@ -14,6 +14,13 @@ def group_index(request):
     groups = Group.objects.all()
     form = CreateGroupForm()
     if request.method == "POST":
+        if "group_id" in request.POST:
+            group_id = request.POST.get("group_id")
+            group = get_object_or_404(Group, id=group_id)
+            group.members.add("request.user")
+            group.save()
+            messages.success(request, "Joined Group!")
+            return redirect("groups:group_detail", group_id)
         form = CreateGroupForm(request.POST)
         if form.is_valid():
             new_group_form = form.save(commit=False)

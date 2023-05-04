@@ -10,6 +10,13 @@
         <div class="fw-bold"><a href="{% url 'groups:group_detail' group.id %}">{{ group }}</a></div>
         <p class="card-text">{{group.description}}</p>
       </div>
+      <div>
+        <form method="post" action="{% url 'groups:group_index' %}" style="display:inline;">
+          {% csrf_token %}
+          <input type="hidden" name="group_id" value="{{ group.id }}">
+          <button type="submit" class="btn btn-primary">Join Group</button>
+        </form>
+      </div>
     </div>
   {% endfor %}
   </div>
