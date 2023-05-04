@@ -65,26 +65,29 @@
 {% if post in recent_posts %}
 <div class="list-group">
   {% for post in recent_posts %}
-  <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
+  <a href="{% url 'groups:show_post' post_id %}" class="list-group-item list-group-item-action active" aria-current="true">
     <div class="d-flex w-100 justify-content-between">
-      <h5 class="mb-1">{{post.group}}</h5>
-      <small>{{ comment.added|timesince }} ago</small>
+      <h5 class="mb-1">{{ post.title }}</h5>
+      <small>{{ post.added|timesince }} ago</small>
     </div>
-    <p class="mb-1">{{post.content}}</p>
-    <small>And some small print.</small>
+    <p class="mb-1">{{ post.content }}</p>
+    <small>{{ post.group }}</small>
   </a>
+</div>
   {% endfor %}
   {% endif %}
 
   {% if comment in recent_comments %}
   <div class="list-group">
-  <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
-    <div class="d-flex w-100 justify-content-between">
-      <h5 class="mb-1">List group item heading</h5>
-      <small>3 days ago</small>
-    </div>
-    <p class="mb-1">Some placeholder content in a paragraph.</p>
-    <small>And some small print.</small>
-  </a>
+    {% for comment in recent_comments %}
+    <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
+      <div class="d-flex w-100 j fustify-content-between">
+        <h5 class="mb-1">{{ comment.post.title }}</h5>
+        <small>{{ comment.added|timesince }} ago</small>
+      </div>
+      <p class="mb-1">{{ comment.content }}</p>
+      <small>{{ comment.post }}</small>
+    </a>
+    {% endfor %}
     {% endif %}
-{% endblock %}
+    {% endblock %}
