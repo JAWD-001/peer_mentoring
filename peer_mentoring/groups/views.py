@@ -1,4 +1,3 @@
-from account_management.models import UserProfile
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
@@ -53,36 +52,6 @@ def groups_moderated(request):
 
 
 @login_required
-def join_group(request, group_id):
-    group = Group.objects.get(pk=group_id)
-    userprofile = request.user.userprofile
-    context = {
-        "group": group,
-    }
-    if request.method == "POST":
-        userprofile.groups_joined.add(group_id)
-        return redirect("groups:group_detail", group_id)
-    else:
-        return render(request, "group_detail.html", context)
-
-
-@login_required
-def leave_group(request, group_id):
-    group = Group.objects.get(pk=group_id)
-    user = UserProfile.objects.get(request.user)
-    context = {
-        "group": group,
-        "user": user,
-    }
-    if request.method == "POST":
-        if group in user.groups_joined:
-            user.groups_joined.remove(group_id)
-            return redirect("groups:group_home")
-        else:
-            return render(request, context)
-
-
-@login_required
 def group_detail(request, group_id):
     group = get_object_or_404(Group, pk=group_id)
     posts = Post.objects.filter(group=group_id)
@@ -122,6 +91,7 @@ def group_show_post(request, group_id, post_id):
             comment.author = request.user
             comment.save()
             messages.success(request, "Comment Added!")
+            return redirect("groups:show_post", group_id, post_id)
     else:
         form = GroupPostCommentForm()
     context = {
