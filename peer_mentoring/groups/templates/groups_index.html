@@ -11,7 +11,7 @@
         <p class="card-text">{{group.description}}</p>
       </div>
       <div>
-        <form method="post" action="{% url 'groups:group_index' %}" style="display:inline;">
+        <form method="post" action="{% url 'groups:group_home' %}" style="display:inline;">
           {% csrf_token %}
           <input type="hidden" name="group_id" value="{{ group.id }}">
           <button type="submit" class="btn btn-primary">Join Group</button>
