@@ -2,14 +2,40 @@
 {% load bootstrap5 %}
 
 {% block content %}
-
-  {% for post in posts %}
-    <p><a href="{% url 'groups:show_post' group.id post.id %}">{{post}}</a></p>
-  {% endfor %}
-
-    <div class="link">
-        <a class="btn btn-primary" href="{% url 'chat:group_chat_room' group.id %}">Chat here!</a></button>
+  <div class="group-title">
+    {{group.title}}
+  </div>
+  <div class="group-heading">
+    {{group.avatar.url}}
+    {{group.description}}
+  </div>
+  <div class="group-members-posts">
+    <div class="members">
+      {% for member in members %}
+      <p>
+        {{member.avatar}}
+      </p>
+      <p><a>
+        {{member.first_name}}{{member.last_name}}
+      </a>
+      </p>
+      {% endfor %}
     </div>
+    <div class="group-members">
+      {% for post in posts %}
+      <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <p><a href="{% url 'groups:show_post' group.id post.id %}">{{post}}</a></p>
+          <span class="badge bg-primary rounded-pill">14</span>
+        </li>
+      </ul>
+      {% endfor %}
+    </div>
+
+    <div class="group-chat-link">
+      <a class="btn btn-primary" href="{% url 'chat:group_chat_room' group.id %}">Chat here!</a></button>
+    </div>
+  </div>
 
 
 

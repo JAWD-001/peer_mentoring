@@ -16,12 +16,9 @@ def group_index(request):
     if request.method == "POST":
         form = CreateGroupForm(request.POST)
         if form.is_valid():
-            """
-            group_mod = form.save(commit=False)
-            group_mod.groups_moderated = request.user
-            group_mod.save()
-            """
-            form.save()
+            new_group_form = form.save(commit=False)
+            new_group_form.moderator = request.user
+            new_group_form.save()
             messages.success(request, "Group Added!")
             return redirect("groups:group_home")
     context = {"groups": groups, "form": form}
@@ -30,6 +27,7 @@ def group_index(request):
 
 @login_required
 def groups_joined(request):
+    # groups = Group.objects.filter(member=request.user.userprofile)
     groups = request.user.userprofile.groups_joined.all()
     context = {
         "groups": groups,
@@ -39,6 +37,7 @@ def groups_joined(request):
 
 @login_required
 def groups_moderated(request):
+    # groups = Group.object.filter(moderator=request.user.userprofile)
     groups = request.user.userprofile.groups_moderated.all()
     context = {
         "groups": groups,
@@ -55,8 +54,6 @@ def join_group(request, group_id):
     }
     if request.method == "POST":
         userprofile.groups_joined.add(group_id)
-        # TODO do we need the save()
-        userprofile.save()
         return redirect("groups:group_detail", group_id)
     else:
         return render(request, "group_detail.html", context)
@@ -82,7 +79,8 @@ def leave_group(request, group_id):
 def group_detail(request, group_id):
     group = get_object_or_404(Group, pk=group_id)
     posts = Post.objects.filter(group=group_id)
-    member = UserProfile.objects.all()
+    member = Group.members.all()
+    # UserProfile.objects.filter(groups_joined=group_id)
     form = GroupPostForm()
     context = {
         "group": group,

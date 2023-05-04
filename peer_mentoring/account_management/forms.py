@@ -1,10 +1,6 @@
 from django import forms
 from django.contrib.auth import password_validation
-from django.contrib.auth.forms import (
-    AuthenticationForm,
-    PasswordResetForm,
-    UserCreationForm,
-)
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import User
 from django.forms import ModelForm, models
 from django.utils.translation import gettext as _
@@ -82,21 +78,5 @@ class AddPhotoForm(models.ModelForm):
         fields = ["image", "description"]
 
 
-class ResetPasswordForm(PasswordResetForm):
-    email = forms.EmailField(widget=forms.TextInput(attrs={"placeholder": "Email"}))
-
-    class Meta:
-        model = User
-        fields = ["email"]
-        widgets = {
-            "email": forms.TextInput(attrs={"placeholder": "Email"}),
-        }
-
-
-class ForgotUsernameForm(PasswordResetForm):
-    email = forms.EmailField(widget=forms.TextInput(attrs={"placeholder": "Email"}))
-
-    class Meta:
-        models = User
-        fields = ["email"]
-        widgets = {"email": {"placeholder": "Email"}}
+class AddFriendForm(forms.Form):
+    user_id = forms.IntegerField(widget=forms.HiddenInput())

@@ -2,7 +2,6 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from groups.models import Group
 
 
 # Create your models here.
@@ -37,8 +36,7 @@ class UserProfile(models.Model):
         null=True,
         help_text="Required, please enter a date",
     )
-    groups_joined = models.ManyToManyField(Group)
-    # groups_moderated = models.ForeignKey(Group, on_delete=models.CASCADE)
+    friends = models.ManyToManyField("self", blank=True, symmetrical=False)
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name}"
