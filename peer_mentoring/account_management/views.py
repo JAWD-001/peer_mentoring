@@ -1,16 +1,9 @@
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from groups.models import Comment, Post
 
-from .forms import (
-    AddFriendForm,
-    AddPhotoForm,
-    CreateUserForm,
-    CustomUserChangeForm,
-    LoginForm,
-)
+from .forms import AddFriendForm, AddPhotoForm, CustomUserChangeForm
 from .models import UserProfile
 
 # Create your views here.
@@ -84,32 +77,16 @@ def view_profile(request, user_id):
     return render(request, "user_profile.html", context)
 
 
-def create_user(request):
-    form = CreateUserForm(request.POST)
-    if form.is_valid():
-        form.save()
-        username = form.cleaned_data.get("username")
-        password = form.cleaned_data.get("password1")
-        user = authenticate(username=username, password=password)
-        login(request, user)
-        return redirect("home")
-    else:
-        form = LoginForm()
-    return render(request, "account_management/sign_up", {"form": form})
-
-
-def login_view(request):
-    username = request.POST["username"]
-    password = request.POST["password"]
-    form = LoginForm(request.POST)
-    if form.is_valid():
-        user = authenticate(request, username=username, password=password)
-    if user is not None:
-        login(request, user)
-        return redirect("home")
-    else:
-        return "Login Failed, please check your password or username again"
-
-
-def logout_view(request):
-    logout(request)
+@login_required
+def user_index(request):
+    users = UserProfile.objects.all()
+    if request.method == "POST":
+        if "user_id" in request.POST:
+            user_id = request.POST.get("user_id")
+            user = get_object_or_404(UserProfile, id=user_id)
+            user.friends.add(user_id)
+            user.save()
+            messages.success(request, "Friend Request Sent")
+            return redirect("account_management:view_profile", user_id)
+    context = {"users": users}
+    return render(request, "profile_index.html", context)

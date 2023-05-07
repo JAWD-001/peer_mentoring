@@ -38,6 +38,15 @@
             <li><a class="dropdown-item" href="{% url 'groups:groups_moderated' %}">Groups You Manage</a></li>
           </ul>
         </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="{% url 'account_management:user_index' %}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Mentors
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{% url 'account_management:user_index' %}">Find A Mentor</a></li>
+            <li><a class="dropdown-item" href="{% url 'groups:groups_joined' %}">Your Mentors</a></li>
+          </ul>
+        </li>
       </ul>
       <form class="d-flex" role="search">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load bootstrap5 %}
+
+{% block content %}
+  <div class="group-index-list">
+  {% for user in users %}
+    <div class="card" style="width: 18rem;">
+      <img src="{{user.avatar.image.url}}" class="card-img-top" alt="...">
+      <div class="card-body">
+        <div class="fw-bold"><a href="{% url 'account_management:view_profile' user.id %}">{{ user.username }}</a></div>
+        <p class="card-text">{{user.title}}</p>
+      </div>
+      {% if request.user not in user.members %}
+      <div>
+        <form method="post" action="{% url 'account_management:profile_home' %}" style="display:inline;">
+          {% csrf_token %}
+          <input type="hidden" name="user_id" value="{{ user.id }}">
+          <button type="submit" class="btn btn-primary">Add Friend</button>
+        </form>
+      </div>
+      {% endif %}
+    </div>
+  {% endfor %}
+  </div>
+
+{% endblock %}
