@@ -55,6 +55,10 @@ def groups_moderated(request):
 def group_detail(request, group_id):
     group = get_object_or_404(Group, pk=group_id)
     posts = Post.objects.filter(group=group_id)
+    # TODO: check if user is member of group to allow access
+    # TODO: where did the group join functionality go
+    # TODO: add step to the workflow that before joining group, moderator,
+    # needs to approve
     member = group.members.all()
     # UserProfile.objects.filter(groups_joined=group_id)
     form = GroupPostForm()

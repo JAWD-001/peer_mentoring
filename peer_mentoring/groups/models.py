@@ -38,6 +38,14 @@ class Group(models.Model):
         return self.title
 
 
+class GroupJoinRequest(models.Model):
+    """Start of moderator group join approval process"""
+
+    user = models.ForeignKey(user, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    approved = models.BooleanField(default=False)
+
+
 class Post(models.Model):
     id = models.BigAutoField(primary_key=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
