@@ -10,7 +10,7 @@
         <div class="fw-bold"><a href="{% url 'account_management:view_profile' user.id %}">{{ user.username }}</a></div>
         <p class="card-text">{{user.title}}</p>
       </div>
-      {% if request.user not in user.members %}
+      {% if user not in request.user.friends %}
       <div>
         <form method="post" action="{% url 'account_management:profile_home' %}" style="display:inline;">
           {% csrf_token %}

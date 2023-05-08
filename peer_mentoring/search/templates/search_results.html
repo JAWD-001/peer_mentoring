@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+
+{% block content %}
+
+    {% if user_results or group_results %}
+        <h2>Users</h2>
+        <ul>
+        {% for user in user_results %}
+            <li><a>{{ user.username }}</a></li>
+        {% endfor %}
+        </ul>
+
+        <h2>Groups</h2>
+        <ul>
+        {% for group in group_results %}
+            <li><a>{{ group.name }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No results found.</p>
+    {% endif %}
+
+{% endblock %}
