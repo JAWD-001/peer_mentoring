@@ -51,3 +51,28 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.userprofile.save()
+
+
+class FriendRequest(models.Model):
+    sender = models.ForeignKey(
+        UserProfile, on_delete=models.CASCADE, related_name="sent_requests"
+    )
+    receiver = models.ForeignKey(
+        UserProfile, on_delete=models.CASCADE, related_name="received_requests"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = (
+            "sender",
+            "receiver",
+        )
+
+
+class Notification(models.Model):
+    receiver = models.ForeignKey(
+        UserProfile, on_delete=models.CASCADE, related_name="notifications"
+    )
+    text = models.CharField(max_length=255)
+    read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)

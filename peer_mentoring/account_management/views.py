@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from groups.models import Comment, Post
 
 from .forms import AddFriendForm, AddPhotoForm, CustomUserChangeForm
-from .models import UserProfile
+from .models import FriendRequest, Notification, UserProfile
 
 # Create your views here.
 
@@ -90,3 +90,42 @@ def user_index(request):
             return redirect("account_management:view_profile", user_id)
     context = {"users": users}
     return render(request, "profile_index.html", context)
+
+
+@login_required
+def send_friend_request(request, user_id):
+    receiver = get_object_or_404(UserProfile, id=user_id)
+    if not FriendRequest.objects.filter(
+        sender=request.user, receiver=receiver
+    ).exists():
+        FriendRequest.objects.create(sender=request.user, receiver=receiver)
+        Notification.objects.create(
+            receiver=receiver,
+            text=f"{request.user.username} sent you a friend request.",
+        )
+    else:
+        messages.error(request, "You have already sent a friend request to this user.")
+    return redirect("")
+
+
+def accept_friend_request(request, request_id):
+    friend_request = get_object_or_404(FriendRequest, id=request_id)
+    if friend_request.receiver == request.user:
+        request.user.friends.add(
+            friend_request.sender
+        )  # assumes 'friends' is a ManyToManyField on User
+        friend_request.delete()
+    return redirect("")
+
+
+def reject_friend_request(request, request_id):
+    friend_request = get_object_or_404(FriendRequest, id=request_id)
+    if friend_request.receiver == request.user:
+        friend_request.delete()
+    return redirect("")
+
+
+def friend_request_index(request):
+    friend_requests = FriendRequest.objects.filter(receiver=request.user.userprofile)
+    context = {"friend_requests": friend_requests}
+    return render(request, "friend_requests_index.html", context)

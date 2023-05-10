@@ -1,0 +1,13 @@
+{% extends base.html %}
+{% load bootstrap5 %}
+
+{% block content %}
+
+<h2>Received Friend Requests</h2>
+{% for request in user.received_requests.all %}
+    <p>{{ request.sender.username }} wants to be friends.</p>
+    <a href="{% url 'accept_request' request.id %}">Accept</a>
+    <a href="{% url 'reject_request' request.id %}">Reject</a>
+{% endfor %}
+
+{% endblock %}
