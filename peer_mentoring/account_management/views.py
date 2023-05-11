@@ -105,7 +105,7 @@ def send_friend_request(request, user_id):
         )
     else:
         messages.error(request, "You have already sent a friend request to this user.")
-    return redirect("")
+    return redirect("account_management:view_profile", user_id)
 
 
 def accept_friend_request(request, request_id):
@@ -115,14 +115,14 @@ def accept_friend_request(request, request_id):
             friend_request.sender
         )  # assumes 'friends' is a ManyToManyField on User
         friend_request.delete()
-    return redirect("")
+    return redirect("account_management:request_index")
 
 
 def reject_friend_request(request, request_id):
     friend_request = get_object_or_404(FriendRequest, id=request_id)
     if friend_request.receiver == request.user:
         friend_request.delete()
-    return redirect("")
+    return redirect("account_manage:request_index")
 
 
 def friend_request_index(request):
