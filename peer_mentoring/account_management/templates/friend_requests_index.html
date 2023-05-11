@@ -12,4 +12,8 @@
     {% endfor %}
 {% endif %}
 
+{% if not request in friend_requests %}
+    <p> No current requests!</p>
+{% endif %}
+
 {% endblock %}
