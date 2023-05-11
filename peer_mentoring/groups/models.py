@@ -2,8 +2,6 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.db import models
 
-# Create your models here.
-
 user = get_user_model()
 
 
@@ -31,9 +29,21 @@ class Group(models.Model):
     description = models.TextField(max_length=250, blank=False, null=False)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     added = models.DateTimeField(auto_now_add=True, null=False, blank=False)
+    members = models.ManyToManyField(user)
+    moderator = models.ForeignKey(
+        user, on_delete=models.CASCADE, related_name="moderator"
+    )
 
     def __str__(self):
         return self.title
+
+
+class GroupJoinRequest(models.Model):
+    """Start of moderator group join approval process"""
+
+    user = models.ForeignKey(user, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    approved = models.BooleanField(default=False)
 
 
 class Post(models.Model):
@@ -43,6 +53,9 @@ class Post(models.Model):
     content = models.TextField(blank=False, null=True)
     added = models.DateTimeField(auto_now_add=True, null=False, blank=False)
     group = models.ForeignKey(Group, on_delete=models.CASCADE, blank=True, null=True)
+
+    def __str__(self):
+        return self.title
 
     @property
     def is_group_post(self):

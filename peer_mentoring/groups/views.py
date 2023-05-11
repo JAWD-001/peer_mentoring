@@ -1,4 +1,3 @@
-from account_management.models import UserProfile
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
@@ -14,65 +13,61 @@ def group_index(request):
     groups = Group.objects.all()
     form = CreateGroupForm()
     if request.method == "POST":
+        if "group_id" in request.POST:
+            group_id = request.POST.get("group_id")
+            group = get_object_or_404(Group, id=group_id)
+            group.members.add(request.user)
+            group.save()
+            messages.success(request, "Joined Group!")
+            return redirect("groups:group_detail", group_id)
         form = CreateGroupForm(request.POST)
         if form.is_valid():
-            form.save()
+            new_group_form = form.save(commit=False)
+            new_group_form.moderator = request.user
+            new_group_form.save()
             messages.success(request, "Group Added!")
             return redirect("groups:group_home")
-
     context = {"groups": groups, "form": form}
     return render(request, "groups_index.html", context)
 
 
 @login_required
-def join_group(request, group_id):
-    group = Group.objects.get(pk=group_id)
-    user = UserProfile.objects.get(request.user)
+def groups_joined(request):
+    # groups = Group.objects.filter(member=request.user.userprofile)
+    groups = Group.objects.filter(members=request.user)
     context = {
-        "group": group,
-        "user": user,
+        "groups": groups,
     }
-    if request.method == "POST":
-        user.groups_joined.add(group_id)
-        user.save()
-        return redirect("groups:group_detail", group_id)
-    else:
-        return render(request, "group_detail.html", context)
+    return render(request, "groups_joined.html", context)
 
 
 @login_required
-def leave_group(request, group_id):
-    group = Group.objects.get(pk=group_id)
-    user = UserProfile.objects.get(request.user)
+def groups_moderated(request):
+    # groups = Group.object.filter(moderator=request.user.userprofile)
+    groups = Group.objects.filter(moderator=request.user)
     context = {
-        "group": group,
-        "user": user,
+        "groups": groups,
     }
-    if request.method == "POST":
-        if group in user.groups_joined:
-            user.groups_joined.remove(group_id)
-            return redirect("groups:group_home")
-        else:
-            return render(request, context)
+    return render(request, "groups_moderated.html", context)
 
 
 @login_required
 def group_detail(request, group_id):
     group = get_object_or_404(Group, pk=group_id)
-    post = Post.objects.filter(id=group_id)
-    member = UserProfile.objects.all()
+    posts = Post.objects.filter(group=group_id)
+    # TODO: check if user is member of group to allow access
+    # TODO: where did the group join functionality go
+    # TODO: add step to the workflow that before joining group, moderator,
+    # needs to approve
+    member = group.members.all()
+    # UserProfile.objects.filter(groups_joined=group_id)
+    form = GroupPostForm()
     context = {
         "group": group,
-        "post": post,
+        "posts": posts,
         "members": member,
+        "form": form,
     }
-    return render(request, "group_detail.html", context)
-
-
-@login_required
-def create_group_post(request, group_id):
-    group = Group.objects.get(pk=group_id)
-    form = GroupPostForm()
     if request.method == "POST":
         form = GroupPostForm(request.POST)
         if form.is_valid():
@@ -84,19 +79,14 @@ def create_group_post(request, group_id):
             return redirect("groups:group_detail", group_id)
         else:
             form = GroupPostForm()
-    return render(request, "create_group_post.html", {"form": form})
+    return render(request, "group_detail.html", context)
 
 
 @login_required
 def group_show_post(request, group_id, post_id):
-    post = Post.objects.get(id=group_id)
-    comment = Comment.objects.filter(pk=post_id)
-    form = GroupPostCommentForm()
-    context = {
-        "post": post,
-        "comment": comment,
-        "form": form,
-    }
+    group = Group.objects.get(id=group_id)
+    post = Post.objects.get(id=post_id, group=group)
+    comments = Comment.objects.filter(post=post)
     if request.method == "POST":
         form = GroupPostCommentForm(request.POST)
         if form.is_valid():
@@ -105,7 +95,13 @@ def group_show_post(request, group_id, post_id):
             comment.author = request.user
             comment.save()
             messages.success(request, "Comment Added!")
-            return render(request, "groups_show_post.html", context)
+            return redirect("groups:show_post", group_id, post_id)
     else:
         form = GroupPostCommentForm()
-    return render(request, "groups_show_post.html", {"form": form})
+    context = {
+        "group": group,
+        "post": post,
+        "comments": comments,
+        "form": form,
+    }
+    return render(request, "groups_show_post.html", context)

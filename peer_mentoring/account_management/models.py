@@ -1,8 +1,5 @@
-from django.db import models
-
 from django.contrib.auth.models import User
-from django.core.validators import MaxLengthValidator, MinLengthValidator, EmailValidator
-from groups.models import Group
+from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -19,7 +16,7 @@ class Interest(models.Model):
 
 class Photo(models.Model):
     id = models.BigAutoField(primary_key=True)
-    image = models.ImageField(blank=False, upload_to='photos')
+    image = models.ImageField(blank=False, upload_to="photos")
     description = models.CharField(blank=True, null=True, max_length=200)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
@@ -34,11 +31,15 @@ class UserProfile(models.Model):
     title = models.CharField(max_length=150, blank=True, null=True)
     bio = models.TextField(blank=True, null=True)
     interests = models.ManyToManyField(Interest)
-    dob = models.DateField(blank=True, null=True, help_text="Required, please enter a date", )
-    groups_joined = models.ManyToManyField(Group)
+    dob = models.DateField(
+        blank=True,
+        null=True,
+        help_text="Required, please enter a date",
+    )
+    friends = models.ManyToManyField("self", blank=True, symmetrical=False)
 
     def __str__(self):
-        return f'{self.user.first_name} {self.user.last_name}'
+        return f"{self.user.id} {self.user.username} - {self.title}"
 
 
 @receiver(post_save, sender=User)
@@ -50,3 +51,28 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.userprofile.save()
+
+
+class FriendRequest(models.Model):
+    sender = models.ForeignKey(
+        UserProfile, on_delete=models.CASCADE, related_name="sent_requests"
+    )
+    receiver = models.ForeignKey(
+        UserProfile, on_delete=models.CASCADE, related_name="received_requests"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = (
+            "sender",
+            "receiver",
+        )
+
+
+class Notification(models.Model):
+    receiver = models.ForeignKey(
+        UserProfile, on_delete=models.CASCADE, related_name="notifications"
+    )
+    text = models.CharField(max_length=255)
+    read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)

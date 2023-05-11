@@ -1,7 +1,92 @@
 {% extends 'base.html' %}
+{% load bootstrap5 %}
 
-{% block 'content' %}
+{% block content %}
 
-{{user.first_name}}
+<h2>{{ user.username }}</h2>
 
-{% endblock %}
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Update Profile
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Update Profile Form</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="post" action="" id="update_profile">
+          {% csrf_token %}
+          {% bootstrap_form form %}
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" form_id="update_profile">Update Profile</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#photo_upload">
+  Upload Photo
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="photo_upload" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="photo_upload">Update New Photo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="post" action="" id="photo_upload" enctype="multipart/form-data">
+          {% csrf_token %}
+          {% bootstrap_form photo_upload %}
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" form_id="photo_upload">Upload New Photo</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<li><a href="{% url 'account_email' %}">Change E-mail</a></li>
+<li><a href="{% url 'account_change_password' %}">Change Password</a></li>
+{% if post in recent_posts %}
+<div class="list-group">
+  {% for post in recent_posts %}
+  <a href="{% url 'groups:show_post' post_id %}" class="list-group-item list-group-item-action active" aria-current="true">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">{{ post.title }}</h5>
+      <small>{{ post.added|timesince }} ago</small>
+    </div>
+    <p class="mb-1">{{ post.content }}</p>
+    <small>{{ post.group }}</small>
+  </a>
+</div>
+  {% endfor %}
+  {% endif %}
+
+  {% if comment in recent_comments %}
+  <div class="list-group">
+    {% for comment in recent_comments %}
+    <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
+      <div class="d-flex w-100 j fustify-content-between">
+        <h5 class="mb-1">{{ comment.post.title }}</h5>
+        <small>{{ comment.added|timesince }} ago</small>
+      </div>
+      <p class="mb-1">{{ comment.content }}</p>
+      <small>{{ comment.post }}</small>
+    </a>
+    {% endfor %}
+    {% endif %}
+    {% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load bootstrap5 %}
+
+{% block content %}
+  <h1>{{ user.username }}'s Profile</h1>
+
+  <form method="post" action="{% url 'account_management:send_request' user.id %}">
+    {% csrf_token %}
+    <button type="submit">Send Friend Request</button>
+  </form>
+
+  <h2>Posts</h2>
+  {% for post in user.posts.all %}
+      <p>{{ post.content }}</p>
+  {% endfor %}
+
+  <h2>Comments</h2>
+  {% for comment in user.comments.all %}
+      <p>{{ comment.content }}</p>
+  {% endfor %}
+
+{% endblock %}

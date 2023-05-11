@@ -1,23 +1,28 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
 
-from .models import Interest, Photo, UserProfile
+from .models import FriendRequest, Interest, Notification, Photo, UserProfile
 
-# Register your models here.
+
 @admin.register(Interest)
 class InterestAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'image')
+    list_display = ("id", "name", "image")
 
 
 @admin.register(Photo)
 class PhotoAdmin(admin.ModelAdmin):
-    list_display = ('id', 'image', 'description', 'user')
+    list_display = ("id", "image", "description", "user")
 
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'avatar', 'title', 'bio')
+    list_display = ("id", "user", "avatar", "title", "bio")
 
 
+@admin.register(FriendRequest)
+class FriendRequestAdmin(admin.ModelAdmin):
+    list_display = ("sender", "receiver", "created_at")
 
 
+@admin.register(Notification)
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = ("receiver", "text", "read", "created_at")

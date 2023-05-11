@@ -13,7 +13,11 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import os
 from pathlib import Path
 
+import environ
 from decouple import config
+
+env = environ.Env()
+environ.Env.read_env()  # Reads the .env file
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -39,7 +43,7 @@ INSTALLED_APPS = [
     "account_management.apps.AccountManagementConfig",
     "chat.apps.ChatConfig",
     "groups.apps.GroupsConfig",
-    "posts.apps.PostsConfig",
+    "search.apps.SearchConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -145,7 +149,7 @@ AUTHENTICATION_BACKENDS = [
 
 SITE_ID = 1
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 LOGIN_REDIRECT_URL = "/"
 
 # Static files (CSS, JavaScript, Images)
@@ -158,16 +162,20 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-LOGOUT_REDIRECT_URL = "/login/"
+LOGOUT_REDIRECT_URL = ""
 
 REDIS_HOST = "localhost"
 REDIS_PORT = 6379
 REDIS_DB = 0
 
 # SENDGRID API
+SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
 
 EMAIL_HOST = "smtp.sendgrid.net"
 EMAIL_HOST_USER = "apikey"
 EMAIL_HOST_PASSWORD = os.environ.get("SENDGRID_API_KEY")
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+DEFAULT_FROM_EMAIL = os.environ.get("FROM_EMAIL")
+SENDGRID_SANDBOX_MODE_IN_DEBUG = True

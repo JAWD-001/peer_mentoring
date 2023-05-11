@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+
+{% block content %}
+  <div class="group-index-list">
+  {% for group in groups %}
+    <div class="card" style="width: 18rem;">
+      <img src="{{group.avatar.url}}" class="card-img-top" alt="...">
+      <div class="card-body">
+        <div class="fw-bold"><a href="{% url 'groups:group_detail' group.id %}">{{ group }}</a></div>
+        <p class="card-text">{{group.description}}</p>
+      </div>
+    </div>
+  {% endfor %}
+  </div>
+{% endblock %}
