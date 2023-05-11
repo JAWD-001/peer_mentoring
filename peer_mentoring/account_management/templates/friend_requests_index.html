@@ -3,17 +3,13 @@
 
 {% block content %}
 
-<h2>Received Friend Requests</h2>
-{% if request in friend_requests %}
-    {% for request in friend_requests %}
-        <p>{{ request.sender.username }} wants to be friends.</p>
-            <a href="{% url 'accept_request' request.id %}">Accept</a>
-            <a href="{% url 'reject_request' request.id %}">Reject</a>
-    {% endfor %}
-{% endif %}
-
-{% if not request in friend_requests %}
+  <h2>Received Friend Requests</h2>
+  {% for request in friend_requests %}
+    <p>{{ request.sender.user.username }} wants to be friends.</p>
+    <a href="{% url 'account_management:accept_request' request.id %}">Accept</a>
+    <a href="{% url 'account_management:reject_request' request.id %}">Reject</a>
+  {% empty %}
     <p> No current requests!</p>
-{% endif %}
+  {% endfor %}
 
 {% endblock %}

@@ -39,7 +39,7 @@ class UserProfile(models.Model):
     friends = models.ManyToManyField("self", blank=True, symmetrical=False)
 
     def __str__(self):
-        return f"{self.user.first_name} {self.user.last_name}"
+        return f"{self.user.id} {self.user.username} - {self.title}"
 
 
 @receiver(post_save, sender=User)
