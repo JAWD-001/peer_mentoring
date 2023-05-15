@@ -6,8 +6,8 @@
   <h2>Received Friend Requests</h2>
   {% for request in friend_requests %}
     <p>{{ request.sender.user.username }} wants to be friends.</p>
-    <a href="{% url 'account_management:accept_request' request.id %}">Accept</a>
-    <a href="{% url 'account_management:reject_request' request.id %}">Reject</a>
+    <a class="btn btn-primary" href="{% url 'account_management:accept_request' request.id %}">Accept</a>
+    <a class="btn btn-primary" href="{% url 'account_management:reject_request' request.id %}">Reject</a>
   {% empty %}
     <p> No current requests!</p>
   {% endfor %}
