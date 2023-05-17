@@ -1,3 +1,4 @@
+from account_management.models import UserProfile
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.db import models
@@ -39,11 +40,29 @@ class Group(models.Model):
 
 
 class GroupJoinRequest(models.Model):
-    """Start of moderator group join approval process"""
+    sender = models.ForeignKey(
+        UserProfile, on_delete=models.CASCADE, related_name="group_sent_requests"
+    )
+    receiver = models.ForeignKey(
+        UserProfile, on_delete=models.CASCADE, related_name="group_received_requests"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
 
-    user = models.ForeignKey(user, on_delete=models.CASCADE)
-    group = models.ForeignKey(Group, on_delete=models.CASCADE)
-    approved = models.BooleanField(default=False)
+    class Meta:
+        unique_together = (
+            "sender",
+            "receiver",
+        )
+
+
+class GroupRequestNotification(models.Model):
+    receiver = models.ForeignKey(
+        UserProfile,
+        on_delete=models.CASCADE,
+        related_name="group_request_notifications",
+    )
+    text = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
 class Post(models.Model):
