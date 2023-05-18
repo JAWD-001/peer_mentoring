@@ -140,4 +140,4 @@ def reject_join_request(request, join_request_id):
     if group.moderator != request.user:
         raise PermissionDenied()
     join_request.delete()
-    messages.success(request, f"{join_request.user.username}'s join request")
+    messages.success(request, f"{join_request.user.username}'s join request was denied")
