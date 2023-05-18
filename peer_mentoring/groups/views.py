@@ -1,9 +1,10 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import CreateGroupForm, GroupPostCommentForm, GroupPostForm
-from .models import Comment, Group, Post
+from .models import Comment, Group, GroupJoinRequest, Post
 
 # Create your views here.
 
@@ -56,10 +57,10 @@ def group_detail(request, group_id):
     group = get_object_or_404(Group, pk=group_id)
     posts = Post.objects.filter(group=group_id)
     # TODO: check if user is member of group to allow access
-    # TODO: where did the group join functionality go
-    # TODO: add step to the workflow that before joining group, moderator,
     # needs to approve
     member = group.members.all()
+    if request.user not in member:
+        raise PermissionDenied()
     # UserProfile.objects.filter(groups_joined=group_id)
     form = GroupPostForm()
     context = {
@@ -105,3 +106,38 @@ def group_show_post(request, group_id, post_id):
         "form": form,
     }
     return render(request, "groups_show_post.html", context)
+
+
+@login_required
+def send_group_join_request(request, group_id):
+    group = get_object_or_404(Group, id=group_id)
+    if not GroupJoinRequest.objects.filter(user=request.user, group=group).exists():
+        GroupJoinRequest.objects.create(user=request.user, group=group)
+        messages.success(request, "Group join request sent.")
+    else:
+        messages.error(request, "You have already sent a join request to this group.")
+    return redirect("group_detail", group_id=group_id)
+
+
+@login_required
+def accept_join_request(request, join_request_id):
+    join_request = get_object_or_404(GroupJoinRequest, id=join_request_id)
+    group = join_request.group
+    if group.moderator != request.user:
+        raise PermissionDenied()
+    group.members.add(join_request.user)
+    join_request.delete()
+    messages.success(
+        request, f"{join_request.user.username} has been added to the group."
+    )
+    return redirect("manage_group_join_requests", group_id=group.id)
+
+
+@login_required
+def reject_join_request(request, join_request_id):
+    join_request = get_object_or_404(GroupJoinRequest, id=join_request_id)
+    group = join_request.group
+    if group.moderator != request.user:
+        raise PermissionDenied()
+    join_request.delete()
+    messages.success(request, f"{join_request.user.username}'s join request")

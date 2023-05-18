@@ -55,16 +55,6 @@ class GroupJoinRequest(models.Model):
         )
 
 
-class GroupRequestNotification(models.Model):
-    receiver = models.ForeignKey(
-        UserProfile,
-        on_delete=models.CASCADE,
-        related_name="group_request_notifications",
-    )
-    text = models.CharField(max_length=255)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-
 class Post(models.Model):
     id = models.BigAutoField(primary_key=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
