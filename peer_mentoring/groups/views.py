@@ -26,7 +26,8 @@ def group_index(request):
             new_group_form = form.save(commit=False)
             new_group_form.moderator = request.user
             new_group_form.save()
-            messages.success(request, "Group Added!")
+            new_group_form.members.add(request.user)
+            messages.success(request, "Group Created and User Added as First Member!")
             return redirect("groups:group_home")
     context = {"groups": groups, "form": form}
     return render(request, "groups_index.html", context)
