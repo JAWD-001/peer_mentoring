@@ -29,13 +29,44 @@ class Group(models.Model):
     description = models.TextField(max_length=250, blank=False, null=False)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     added = models.DateTimeField(auto_now_add=True, null=False, blank=False)
-    member = models.ForeignKey(user, on_delete=models.CASCADE, related_name="members")
+    members = models.ManyToManyField(user)
     moderator = models.ForeignKey(
         user, on_delete=models.CASCADE, related_name="moderator"
     )
+    # banned = models.ManyToManyField(user)
 
     def __str__(self):
         return self.title
+
+    def can_join(self, user):
+        if user == self.moderator:
+            return False
+        if user in self.members.all():
+            return False
+        # if user in self.banned.all():
+        #   return False
+        # TODO: this could cause n+1 problem
+        # https://www.youtube.com/watch?v=e_8JvcP1q48
+        if GroupJoinRequest.objects.filter(sender=user, group=self).exists():
+            return False
+        return True
+
+
+class GroupJoinRequest(models.Model):
+    sender = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="group_sent_requests"
+    )
+    receiver = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="group_received_requests"
+    )
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = (
+            "sender",
+            "receiver",
+        )
 
 
 class Post(models.Model):

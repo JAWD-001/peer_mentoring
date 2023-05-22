@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load bootstrap5 %}
+
+{% block content %}
+  <h1>{{ user.username }}'s Profile</h1>
+{% if profile.user.id not in request.user.friends %}}
+    <div>
+        <form method="post" id="friend_request" action="{% url 'account_management:send_request' user.id %}" style="display:inline;">
+            {% csrf_token %}
+            <input type="hidden" name="user_id" value="{{ profile.user.id }}">
+            <button type="submit" class="btn btn-primary">Add Friend</button>
+        </form>
+    </div>
+
+{% endif %}
+
+<h2>Posts</h2>
+{% for post in user.posts.all %}
+<p>{{ post.content }}</p>
+{% endfor %}
+
+<h2>Comments</h2>
+{% for comment in user.comments.all %}
+<p>{{ comment.content }}</p>
+{% endfor %}
+
+{% endblock %}

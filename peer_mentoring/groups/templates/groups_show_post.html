@@ -12,10 +12,21 @@
         <h4>{{post.content}}</h4>
     </div>
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="add">
-</form>
+  {% for comment in comments %}
+    <div class="card">
+      <blockquote>
+        {{ comment.content }}
+      </blockquote>
+      <span>{{ comment.added|timesince }} ago</span>
+    </div>
+  {% endfor %}
+
+  <hr>
+
+  <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" value="add">
+  </form>
 
 {% endblock %}

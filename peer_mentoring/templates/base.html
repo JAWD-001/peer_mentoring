@@ -27,6 +27,20 @@
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="{% url 'account_management:profile_home' %}">Profile</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'account_management:user_index' %}">Mentors</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="{% url 'account_management:user_index' %}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Mentors
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{% url 'account_management:user_index' %}">Find A Mentor</a></li>
+            <li><a class="dropdown-item" href="{% url 'account_management:request_index' %}">Your Mentor Requests</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="{% url 'groups:groups_moderated' %}">Groups You Manage</a></li>
+          </ul>
+        </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="{% url 'groups:group_home' %}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Groups
@@ -35,12 +49,12 @@
             <li><a class="dropdown-item" href="{% url 'groups:group_home' %}">Find A Group</a></li>
             <li><a class="dropdown-item" href="{% url 'groups:groups_joined' %}">Your Groups</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Groups You Manage</a></li>
+            <li><a class="dropdown-item" href="{% url 'groups:groups_moderated' %}">Groups You Manage</a></li>
           </ul>
         </li>
       </ul>
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+      <form method="get" action="{% url 'search:results' %}" class="d-flex" role="search">
+        <input class="form-control me-2" type="search"  name="q" placeholder="Search..." aria-label="Search">
         <button class="btn btn-outline-success" type="submit">Search</button>
       </form>
       <ul class="navbar-nav -auto mb-2 mb-lg-0">
@@ -223,9 +237,9 @@
 
 {% endif %}
 
-    {% block content %}
+  {% bootstrap_messages %}
 
-    {% endblock %}
+    {% block content %}{% endblock %}
 
     {% block extra_body %}
     {% endblock %}

@@ -1,17 +1,11 @@
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, redirect, render
 from groups.models import Comment, Post
 
-from .forms import (
-    AddFriendForm,
-    AddPhotoForm,
-    CreateUserForm,
-    CustomUserChangeForm,
-    LoginForm,
-)
-from .models import UserProfile
+from .forms import AddPhotoForm, CustomUserChangeForm
+from .models import FriendRequest, Notification, UserProfile
 
 # Create your views here.
 
@@ -26,9 +20,11 @@ def profile_home(request):
     form = CustomUserChangeForm()
     photo_upload = AddPhotoForm()
     # user_photos = Photo.objects.filter(user=user)
-    recent_posts = Post.objects.filter(author=user).order_by("added").reverse()[0:9]
+    recent_posts = (
+        Post.objects.filter(author=request.user).order_by("added").reverse()[0:9]
+    )
     recent_comments = (
-        Comment.objects.filter(author=user).order_by("added").reverse()[0:9]
+        Comment.objects.filter(author=request.user).order_by("added").reverse()[0:9]
     )
     if request.method == "POST":
         if request.FILES:
@@ -59,55 +55,74 @@ def profile_home(request):
 
 
 def view_profile(request, user_id):
-    user = get_object_or_404(UserProfile, id=user_id)
-    posts = Post.objects.filter(user=user)
-    comments = Comment.objects.filter(user=user)
-
-    if request.method == "POST":
-        form = AddFriendForm(request.POST)
-        if form.is_valid():
-            friend = get_object_or_404(UserProfile, id=form.cleaned_data[user_id])
-            request.user.friends.add(friend)
-            request.user.save()
-            return redirect("user_profile", user_id=user_id)
-    else:
-        form = AddFriendForm(initial={"user_id": user.id})
-
+    user = get_object_or_404(User, id=user_id)
+    posts = Post.objects.filter(author=user)
+    comments = Comment.objects.filter(author=user)
     context = {
         "user": user,
         "posts": posts,
         "comments": comments,
-        "form": form,
     }
-    return render(request, "user_profile.html", context)
+    return render(request, "other_user_profile.html", context)
 
 
-def create_user(request):
-    form = CreateUserForm(request.POST)
-    if form.is_valid():
-        form.save()
-        username = form.cleaned_data.get("username")
-        password = form.cleaned_data.get("password1")
-        user = authenticate(username=username, password=password)
-        login(request, user)
-        return redirect("home")
+@login_required
+def user_index(request):
+    profiles = UserProfile.objects.all()
+    if request.method == "POST":
+        if "user_id" in request.POST:
+            user_id = request.POST.get("user_id")
+            user = get_object_or_404(UserProfile, id=user_id)
+            user.friends.add(user_id)
+            user.save()
+            messages.success(request, "Friend Request Sent")
+            return redirect("account_management:view_profile", user_id)
+    context = {"profiles": profiles}
+    return render(request, "profile_index.html", context)
+
+
+@login_required
+def send_friend_request(request, user_id):
+    receiver = get_object_or_404(User, id=user_id)
+    if not FriendRequest.objects.filter(
+        sender=request.user.userprofile, receiver=receiver.userprofile
+    ).exists():
+        FriendRequest.objects.create(
+            sender=request.user.userprofile, receiver=receiver.userprofile
+        )
+        Notification.objects.create(
+            receiver=receiver.userprofile,
+            text=f"{request.user.username} sent you a friend request.",
+        )
+        # TODO
+        messages.success(request, "success message")
     else:
-        form = LoginForm()
-    return render(request, "account_management/sign_up", {"form": form})
+        messages.error(request, "You have already sent a friend request to this user.")
+    return redirect("account_management:view_profile", user_id)
 
 
-def login_view(request):
-    username = request.POST["username"]
-    password = request.POST["password"]
-    form = LoginForm(request.POST)
-    if form.is_valid():
-        user = authenticate(request, username=username, password=password)
-    if user is not None:
-        login(request, user)
-        return redirect("home")
-    else:
-        return "Login Failed, please check your password or username again"
+def accept_friend_request(request, request_id):
+    friend_request = get_object_or_404(FriendRequest, id=request_id)
+    if friend_request.receiver == request.user:
+        request.user.friends.add(
+            friend_request.sender
+        )  # assumes 'friends' is a ManyToManyField on User
+        friend_request.delete()
+        # TODO
+        messages.success(request, "success message")
+    return redirect("account_management:request_index")
 
 
-def logout_view(request):
-    logout(request)
+def reject_friend_request(request, request_id):
+    friend_request = get_object_or_404(FriendRequest, id=request_id)
+    if friend_request.receiver == request.user:
+        friend_request.delete()
+        # TODO
+        messages.success(request, "success message")
+    return redirect("account_manage:request_index")
+
+
+def friend_request_index(request):
+    friend_requests = FriendRequest.objects.filter(receiver=request.user.userprofile)
+    context = {"friend_requests": friend_requests}
+    return render(request, "friend_requests_index.html", context)
