@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
@@ -133,7 +134,7 @@ def accept_join_request(request, join_request_id):
     messages.success(
         request, f"{join_request.user.username} has been added to the group."
     )
-    return redirect("manage_group_join_requests", group_id=group.id)
+    return redirect("groups:manage_group_join_requests", group_id=group.id)
 
 
 @login_required
@@ -144,3 +145,37 @@ def reject_join_request(request, join_request_id):
         raise PermissionDenied()
     join_request.delete()
     messages.success(request, f"{join_request.user.username}'s join request was denied")
+
+
+@login_required
+def delete_post(request, group_id, post_id):
+    group = get_object_or_404(Group, id=group_id)
+    post = get_object_or_404(Post, id=post_id)
+    if group.moderator != request.user:
+        messages.error(request, "You don't have permission to delete the post.")
+    post.delete()
+    messages.success(request, "Post has been deleted.")
+    return redirect("group:group_detail", group_id=group.id)
+
+
+@login_required
+def delete_comment(request, group_id, post_id, comment_id):
+    group = get_object_or_404(Group, id=group_id)
+    post = get_object_or_404(Post, id=post_id)
+    comment = get_object_or_404(Comment, id=comment_id)
+    if group.moderator != request.user:
+        messages.error(request, "You don't have permission to delete the comment")
+    comment.delete()
+    messages.success(request, "Comment has been deleted.")
+    return redirect("groups:show_post", group_id=group.id, post_id=post.id)
+
+
+@login_required
+def ban_user(request, group_id, user_id):
+    group = get_object_or_404(Group, id=group_id)
+    if group.moderator != request.user:
+        messages.error(request, "You don't have access to ban users")
+    user_to_ban = get_object_or_404(User, id=user_id)
+    group.banned_users.add(user_to_ban)
+    messages.success(request, f"{user_to_ban.username} has been banned.")
+    return redirect("groups:group_detail", group_id=group.id)
