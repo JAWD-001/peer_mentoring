@@ -33,17 +33,40 @@ class Group(models.Model):
     moderator = models.ForeignKey(
         user, on_delete=models.CASCADE, related_name="moderator"
     )
+    # banned = models.ManyToManyField(user)
 
     def __str__(self):
         return self.title
 
+    def can_join(self, user):
+        if user == self.moderator:
+            return False
+        if user in self.members.all():
+            return False
+        # if user in self.banned.all():
+        #   return False
+        # TODO: this could cause n+1 problem
+        # https://www.youtube.com/watch?v=e_8JvcP1q48
+        if GroupJoinRequest.objects.filter(sender=user, group=self).exists():
+            return False
+        return True
+
 
 class GroupJoinRequest(models.Model):
-    """Start of moderator group join approval process"""
-
-    user = models.ForeignKey(user, on_delete=models.CASCADE)
+    sender = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="group_sent_requests"
+    )
+    receiver = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="group_received_requests"
+    )
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
-    approved = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = (
+            "sender",
+            "receiver",
+        )
 
 
 class Post(models.Model):
