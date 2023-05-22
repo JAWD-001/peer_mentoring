@@ -1,14 +1,6 @@
 from django.contrib import admin
 
-from .models import (
-    Avatar,
-    Category,
-    Comment,
-    Group,
-    GroupJoinRequest,
-    GroupRequestNotification,
-    Post,
-)
+from .models import Avatar, Category, Comment, Group, GroupJoinRequest, Post
 
 
 @admin.register(Avatar)
@@ -39,8 +31,3 @@ class CommentAdmin(admin.ModelAdmin):
 @admin.register(GroupJoinRequest)
 class GroupRequestAdmin(admin.ModelAdmin):
     list_display = ["id", "sender", "receiver", "created_at"]
-
-
-@admin.register(GroupRequestNotification)
-class GroupRequestNotificationAdmin(admin.ModelAdmin):
-    list_display = ["id", "receiver", "text", "created_at"]

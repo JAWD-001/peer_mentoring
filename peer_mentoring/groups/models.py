@@ -1,4 +1,3 @@
-from account_management.models import UserProfile
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.db import models
@@ -34,18 +33,33 @@ class Group(models.Model):
     moderator = models.ForeignKey(
         user, on_delete=models.CASCADE, related_name="moderator"
     )
+    # banned = models.ManyToManyField(user)
 
     def __str__(self):
         return self.title
 
+    def can_join(self, user):
+        if user == self.moderator:
+            return False
+        if user in self.members.all():
+            return False
+        # if user in self.banned.all():
+        #   return False
+        # TODO: this could cause n+1 problem
+        # https://www.youtube.com/watch?v=e_8JvcP1q48
+        if GroupJoinRequest.objects.filter(sender=user, group=self).exists():
+            return False
+        return True
+
 
 class GroupJoinRequest(models.Model):
     sender = models.ForeignKey(
-        UserProfile, on_delete=models.CASCADE, related_name="group_sent_requests"
+        User, on_delete=models.CASCADE, related_name="group_sent_requests"
     )
     receiver = models.ForeignKey(
-        UserProfile, on_delete=models.CASCADE, related_name="group_received_requests"
+        User, on_delete=models.CASCADE, related_name="group_received_requests"
     )
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
