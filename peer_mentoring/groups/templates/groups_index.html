@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load bootstrap5 %}
+{% load group_filters %}
 
 {% block content %}
   <div class="group-index-list">
@@ -10,14 +11,14 @@
         <div class="fw-bold"><a href="{% url 'groups:group_detail' group.id %}">{{ group }}</a></div>
         <p class="card-text">{{group.description}}</p>
       </div>
-      {% if request.user not in groups.members %}
-      <div>
-        <form method="post" action="{% url 'groups:group_home' %}" style="display:inline;">
-          {% csrf_token %}
-          <input type="hidden" name="group_id" value="{{ group.id }}">
-          <button type="submit" class="btn btn-primary">Join Group</button>
-        </form>
-      </div>
+      {% if group|can_join:request.user %}
+        <div>
+          <form method="post" action="{% url 'groups:send_group_join_request' %}" style="display:inline;">
+            {% csrf_token %}
+            <input type="hidden" name="group_id" value="{{ group.id }}">
+            <button type="submit" class="btn btn-primary">Join Group</button>
+          </form>
+        </div>
       {% endif %}
     </div>
   {% endfor %}
