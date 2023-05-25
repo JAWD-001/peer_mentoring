@@ -179,3 +179,13 @@ def ban_user(request, group_id, user_id):
     group.banned_users.add(user_to_ban)
     messages.success(request, f"{user_to_ban.username} has been banned.")
     return redirect("groups:group_detail", group_id=group.id)
+
+
+def group_request_index(request, group_id):
+    group = get_object_or_404(Group, id=group_id)
+    requests = GroupJoinRequest.objects.filter(id=group_id)
+    context = {
+        "group": group,
+        "requests": requests,
+    }
+    return render(request, "groups_request_index.html", context)
