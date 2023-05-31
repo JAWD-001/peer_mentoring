@@ -45,7 +45,7 @@ urlpatterns = [
     ),
     path("group/<int:group_id>/ban_user/<int:user_id>/", ban_user, name="ban_user"),
     path(
-        "group/<int:group_id>/delete_post/<int:post_id/>",
+        "group/<int:group_id>/delete_post/<int:post_id>/",
         delete_post,
         name="delete_post",
     ),
