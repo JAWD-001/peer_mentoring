@@ -82,6 +82,15 @@ def user_index(request):
 
 
 @login_required
+def mentor_index(request):
+    mentors = request.user.userprofile.friends.all()
+    context = {
+        "mentors": mentors,
+    }
+    return render(request, "mentor_index.html", context)
+
+
+@login_required
 def send_friend_request(request, user_id):
     receiver = get_object_or_404(User, id=user_id)
     if not FriendRequest.objects.filter(

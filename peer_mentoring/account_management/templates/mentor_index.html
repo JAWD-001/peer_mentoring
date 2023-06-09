@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load bootstrap5 %}
+
+{% block content %}
+  <div class="group-index-list">
+  {% for mentor in mentors %}
+    <div class="card" style="width: 18rem;">
+      <img src="{{profile.user.avatar.image.url}}" class="card-img-top" alt="...">
+      <div class="card-body">
+        <div class="fw-bold"><a href="{% url 'account_management:view_profile' mentor.user.id %}">{{ mentor.user.username }}</a></div>
+        <p class="card-text">{{mentor.user.title}}</p>
+      </div>
+    </div>
+  {% endfor %}
+  </div>
+
+{% endblock %}tml>
