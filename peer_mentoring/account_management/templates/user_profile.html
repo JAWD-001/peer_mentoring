@@ -79,7 +79,7 @@
   {% if comment in recent_comments %}
   <div class="list-group">
     {% for comment in recent_comments %}
-    <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
+    <a href="{% url 'groups:show_post' post_id %}" class="list-group-item list-group-item-action active" aria-current="true">
       <div class="d-flex w-100 j fustify-content-between">
         <h5 class="mb-1">{{ comment.post.title }}</h5>
         <small>{{ comment.added|timesince }} ago</small>
