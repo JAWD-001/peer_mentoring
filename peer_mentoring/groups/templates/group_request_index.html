@@ -2,12 +2,12 @@
 {% load bootstrap5 %}
 
 {% block content %}
-    <h2>Received Friend Requests</h2>
+    <h2>Received Group Requests</h2>
     <div>
         {% for request in requests %}
-        <p>{{ request.sender.user.username }} wants to be friends.</p>
-        <a class="btn btn-primary" href="{% url 'account_management:accept_request' request.id %}">Accept</a>
-        <a class="btn btn-primary" href="{% url 'account_management:reject_request' request.id %}">Reject</a>
+        <p>{{ request.sender.username }} wants to join the group.</p>
+        <a class="btn btn-primary" href="{% url 'groups:group_approve_join' request.id %}">Accept</a>
+        <a class="btn btn-primary" href="{% url 'groups:group_reject_request' request.id %}">Reject</a>
         {% empty %}
         <p> No current requests!</p>
         {% endfor %}

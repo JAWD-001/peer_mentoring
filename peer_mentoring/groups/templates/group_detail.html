@@ -9,6 +9,9 @@
     {{group.avatar.url}}
     {{group.description}}
   </div>
+{% if group.moderator == request.user %}
+  <a href="{% url 'groups:group_request_index' group.id %}"><p>View Group Requests</p></a>
+{% endif %}
   <div class="group-members-posts">
     <div class="members">
       {% for member in members %}

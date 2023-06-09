@@ -33,7 +33,9 @@ class Group(models.Model):
     moderator = models.ForeignKey(
         user, on_delete=models.CASCADE, related_name="moderator"
     )
-    banned_users = models.ManyToManyField(User, related_name="banned_from_groups")
+    banned_users = models.ManyToManyField(
+        User, related_name="banned_from_groups", null=True, blank=True
+    )
     # banned = models.ManyToManyField(user)
 
     def __str__(self):
