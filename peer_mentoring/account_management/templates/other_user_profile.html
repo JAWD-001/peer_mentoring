@@ -3,7 +3,7 @@
 
 {% block content %}
   <h1>{{ user.username }}'s Profile</h1>
-{% if profile.user.id not in request.user.friends %}}
+{% if user.id not in request.user.username.friends.all %}
     <div>
         <form method="post" id="friend_request" action="{% url 'account_management:send_request' user.id %}" style="display:inline;">
             {% csrf_token %}
@@ -11,11 +11,15 @@
             <button type="submit" class="btn btn-primary">Add Friend</button>
         </form>
     </div>
+{% else %}
+    <div>
+        <small>You're already friends!</small>
+    </div>
 
 {% endif %}
 
 <h2>Posts</h2>
-{% for post in user.posts.all %}
+{% for post in user.username.posts.all %}
 <p>{{ post.content }}</p>
 {% endfor %}
 
