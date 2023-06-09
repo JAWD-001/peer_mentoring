@@ -2,8 +2,12 @@
 {% load bootstrap5 %}
 
 {% block content %}
-  <h1>{{ user.username }}'s Profile</h1>
-{% if user.id not in request.user.username.friends.all %}
+    <h1>{{ user.username }}'s Profile</h1>
+{% if user in request.user.userprofile.friends.all %}
+    <div>
+        <small>Check out your mentor's page!</small>
+    </div>
+{% elif request.user != user and user not in request.user.userprofile.friends.all %}
     <div>
         <form method="post" id="friend_request" action="{% url 'account_management:send_request' user.id %}" style="display:inline;">
             {% csrf_token %}
@@ -13,7 +17,7 @@
     </div>
 {% else %}
     <div>
-        <small>You're already friends!</small>
+        <small>Check out your page!</small>
     </div>
 
 {% endif %}

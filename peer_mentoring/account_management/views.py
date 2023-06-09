@@ -103,8 +103,8 @@ def send_friend_request(request, user_id):
 
 def accept_friend_request(request, request_id):
     friend_request = get_object_or_404(FriendRequest, id=request_id)
-    if friend_request.receiver == request.user:
-        request.user.friends.add(
+    if friend_request.receiver == request.user.userprofile:
+        request.user.userprofile.friends.add(
             friend_request.sender
         )  # assumes 'friends' is a ManyToManyField on User
         friend_request.delete()
