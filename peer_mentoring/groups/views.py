@@ -142,7 +142,7 @@ def accept_join_request(request, join_request_id):
     group.members.add(join_request.sender)
     join_request.delete()
     messages.success(
-        request, f"{join_request.user.username} has been added to the group."
+        request, f"{join_request.sender.username} has been added to the group."
     )
     return redirect("groups:manage_group_join_requests", group_id=group.id)
 
