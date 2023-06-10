@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
+from django.db.models import Count
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
@@ -52,6 +53,9 @@ def groups_moderated(request):
 def group_detail(request, group_id):
     group = get_object_or_404(Group, pk=group_id)
     posts = Post.objects.filter(group=group_id)
+    comment_count = Post.objects.filter(group=group_id).annotate(
+        comment_count=Count("comment")
+    )
     members = group.members.all()
     if GroupJoinRequest.objects.filter(sender=request.user, group=group).exists():
         messages.error(request, "Group request is being processed")
@@ -67,6 +71,7 @@ def group_detail(request, group_id):
         "posts": posts,
         "members": members,
         "form": form,
+        "comment_count": comment_count,
     }
     if request.method == "POST":
         form = GroupPostForm(request.POST)
