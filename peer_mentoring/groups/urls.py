@@ -23,7 +23,7 @@ urlpatterns = [
         "groups_join_request/", send_group_join_request, name="send_group_join_request"
     ),
     path(
-        "group/<int:group_ip>/group_request_index/",
+        "group/<int:group_id>/group_request_index/",
         group_request_index,
         name="group_request_index",
     ),

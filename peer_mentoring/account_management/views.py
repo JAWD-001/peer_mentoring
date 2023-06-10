@@ -20,11 +20,9 @@ def profile_home(request):
     form = CustomUserChangeForm()
     photo_upload = AddPhotoForm()
     # user_photos = Photo.objects.filter(user=user)
-    recent_posts = (
-        Post.objects.filter(author=request.user).order_by("added").reverse()[0:9]
-    )
+    recent_posts = Post.objects.filter(author=user).order_by("added").reverse()[0:9]
     recent_comments = (
-        Comment.objects.filter(author=request.user).order_by("added").reverse()[0:9]
+        Comment.objects.filter(author=user).order_by("added").reverse()[0:9]
     )
     if request.method == "POST":
         if request.FILES:
@@ -82,6 +80,15 @@ def user_index(request):
 
 
 @login_required
+def mentor_index(request):
+    mentors = request.user.userprofile.friends.all()
+    context = {
+        "mentors": mentors,
+    }
+    return render(request, "mentor_index.html", context)
+
+
+@login_required
 def send_friend_request(request, user_id):
     receiver = get_object_or_404(User, id=user_id)
     if not FriendRequest.objects.filter(
@@ -103,11 +110,17 @@ def send_friend_request(request, user_id):
 
 def accept_friend_request(request, request_id):
     friend_request = get_object_or_404(FriendRequest, id=request_id)
-    if friend_request.receiver == request.user:
-        request.user.friends.add(
+    if friend_request.receiver == request.user.userprofile:
+        friend_request.receiver.friends.add(
             friend_request.sender
         )  # assumes 'friends' is a ManyToManyField on User
-        friend_request.delete()
+        friend_request.sender.friends.add(
+            friend_request.receiver
+        )  # assumes 'friends' is a ManyToManyField on User
+
+        friend_request.accepted = True
+        friend_request.save()
+
         # TODO
         messages.success(request, "success message")
     return redirect("account_management:request_index")
