@@ -61,6 +61,7 @@ class FriendRequest(models.Model):
         UserProfile, on_delete=models.CASCADE, related_name="received_requests"
     )
     created_at = models.DateTimeField(auto_now_add=True)
+    accepted = models.BooleanField(default=False)
 
     class Meta:
         unique_together = (

@@ -111,10 +111,16 @@ def send_friend_request(request, user_id):
 def accept_friend_request(request, request_id):
     friend_request = get_object_or_404(FriendRequest, id=request_id)
     if friend_request.receiver == request.user.userprofile:
-        request.user.userprofile.friends.add(
+        friend_request.receiver.friends.add(
             friend_request.sender
         )  # assumes 'friends' is a ManyToManyField on User
-        friend_request.delete()
+        friend_request.sender.friends.add(
+            friend_request.receiver
+        )  # assumes 'friends' is a ManyToManyField on User
+
+        friend_request.accepted = True
+        friend_request.save()
+
         # TODO
         messages.success(request, "success message")
     return redirect("account_management:request_index")
