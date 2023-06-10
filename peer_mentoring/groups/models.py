@@ -80,6 +80,9 @@ class Post(models.Model):
     added = models.DateTimeField(auto_now_add=True, null=False, blank=False)
     group = models.ForeignKey(Group, on_delete=models.CASCADE, blank=True, null=True)
 
+    class Meta:
+        ordering = ("user__date_joined",)
+
     def __str__(self):
         return self.title
 
@@ -97,6 +100,9 @@ class Comment(models.Model):
     content = models.TextField(max_length=200, blank=False, null=True)
     added = models.DateTimeField(auto_now_add=True, null=False, blank=False)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ("user__date_joined",)
 
     def __str__(self):
         return self.content
