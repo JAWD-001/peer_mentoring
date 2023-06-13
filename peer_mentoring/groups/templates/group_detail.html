@@ -29,7 +29,7 @@
       <ul class="list-group">
         <li class="list-group-item d-flex justify-content-between align-items-center">
           <p><a href="{% url 'groups:show_post' group.id post.id %}">{{post}}</a></p>
-          <span class="badge bg-primary rounded-pill">{{comment_count.count}}</span>
+          <span class="badge bg-primary rounded-pill">{{post.comment_count}}</span>
         </li>
       </ul>
       {% endfor %}

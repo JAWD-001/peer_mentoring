@@ -52,10 +52,7 @@ def groups_moderated(request):
 @login_required
 def group_detail(request, group_id):
     group = get_object_or_404(Group, pk=group_id)
-    posts = Post.objects.filter(group=group_id)
-    comment_count = Post.objects.filter(group=group_id).annotate(
-        comment_count=Count("comment")
-    )
+    posts = Post.objects.filter(group=group_id).annotate(comment_count=Count("comment"))
     members = group.members.all()
     if GroupJoinRequest.objects.filter(sender=request.user, group=group).exists():
         messages.error(request, "Group request is being processed")
@@ -71,7 +68,6 @@ def group_detail(request, group_id):
         "posts": posts,
         "members": members,
         "form": form,
-        "comment_count": comment_count,
     }
     if request.method == "POST":
         form = GroupPostForm(request.POST)
