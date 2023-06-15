@@ -64,7 +64,7 @@ def view_profile(request, user_id):
 
 @login_required
 def user_index(request):
-    profiles = UserProfile.objects.all()
+    profiles = UserProfile.objects.all().exclude(user=request.user)
     context = {"profiles": profiles}
     return render(request, "profile_index.html", context)
 
