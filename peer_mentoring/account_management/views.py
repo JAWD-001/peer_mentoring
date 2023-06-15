@@ -65,14 +65,6 @@ def view_profile(request, user_id):
 @login_required
 def user_index(request):
     profiles = UserProfile.objects.all()
-    if request.method == "POST":
-        if "user_id" in request.POST:
-            user_id = request.POST.get("user_id")
-            user = get_object_or_404(UserProfile, id=user_id)
-            user.friends.add(user_id)
-            user.save()
-            messages.success(request, "Friend Request Sent")
-            return redirect("account_management:view_profile", user_id)
     context = {"profiles": profiles}
     return render(request, "profile_index.html", context)
 
@@ -100,7 +92,7 @@ def send_friend_request(request, user_id):
             text=f"{request.user.username} sent you a friend request.",
         )
         # TODO
-        messages.success(request, "success message")
+        messages.success(request, "Friend Request sent!")
     else:
         messages.error(request, "You have already sent a friend request to this user.")
     return redirect("account_management:view_profile", user_id)
@@ -126,14 +118,16 @@ def accept_friend_request(request, request_id):
 
 def reject_friend_request(request, request_id):
     friend_request = get_object_or_404(FriendRequest, id=request_id)
-    if friend_request.receiver == request.user:
+    if friend_request.receiver == request.user.userprofile:
         friend_request.delete()
         # TODO
-        messages.success(request, "success message")
-    return redirect("account_manage:request_index")
+        messages.success(request, "Friend request rejected")
+    return redirect("account_management:request_index")
 
 
 def friend_request_index(request):
-    friend_requests = FriendRequest.objects.filter(receiver=request.user.userprofile)
+    friend_requests = FriendRequest.objects.filter(
+        receiver=request.user.userprofile
+    ).filter(accepted=False)
     context = {"friend_requests": friend_requests}
     return render(request, "friend_requests_index.html", context)
