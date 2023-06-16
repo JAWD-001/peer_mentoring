@@ -145,7 +145,7 @@ def accept_join_request(request, join_request_id):
     messages.success(
         request, f"{join_request.sender.username} has been added to the group."
     )
-    return redirect("groups:manage_group_join_requests", group_id=group.id)
+    return redirect("groups:group_home", group_id=group.id)
 
 
 @login_required
