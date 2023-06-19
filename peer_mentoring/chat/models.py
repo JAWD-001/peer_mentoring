@@ -17,3 +17,9 @@ class PrivateChatMessage(models.Model):
     )
     message = models.TextField(max_length=300)
     added = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = (
+            "sender",
+            "receiver",
+        )

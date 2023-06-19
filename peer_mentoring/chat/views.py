@@ -1,9 +1,10 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.http import HttpResponseForbidden
 from django.shortcuts import render
 from groups.models import Group
 
-from .models import ChatMessage
+from .models import ChatMessage, PrivateChatMessage
 
 
 @login_required
@@ -20,3 +21,25 @@ def group_chat_room(request, group_id):
         "chat_messages": chat_messages,
     }
     return render(request, "chat/room.html", context)
+
+
+@login_required
+def private_chat_room(request, sender_id, receiver_id):
+    sender = User.objects.get(pk=sender_id)
+    receiver = User.objects.get(id=receiver_id)
+    private_chat_messages = PrivateChatMessage.objects.filter(
+        sender=sender, receiver=receiver
+    )
+
+    private_group = sender.friends.filter(receiver=receiver)
+    if private_group.count() == 0:
+        return HttpResponseForbidden()
+
+    context = {
+        "private_group": private_group,
+        "private_chat_messages": private_chat_messages,
+    }
+    return render(request, "chat/room.html", context)
+    """
+    Have to make the template and test, but have this refactored so far
+    """
