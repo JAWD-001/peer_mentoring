@@ -36,6 +36,8 @@ def private_chat_room(request, sender_id, receiver_id):
         return HttpResponseForbidden()
 
     context = {
+        "sender": sender,
+        "receiver": receiver,
         "private_group": private_group,
         "private_chat_messages": private_chat_messages,
     }

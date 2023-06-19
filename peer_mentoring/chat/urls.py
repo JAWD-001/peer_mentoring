@@ -9,7 +9,7 @@ urlpatterns = [
     # TODO: private chat
     path(
         "room/sender/<int:sender>/receiver/<int:receiver>",
-        views.private_group_chat_room,
+        views.private_chat_room,
         name="private_chat_room",
     ),
 ]
