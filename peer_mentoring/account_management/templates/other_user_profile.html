@@ -16,8 +16,8 @@
         </form>
     </div>
 {% else %}
-    <div>
-        <small>Check out your page!</small>
+    <div class="private-chat-link">
+      <a class="btn btn-primary" href="{% url 'chat:private_chat_room' sender=request.user receiver.id %}">Chat here!</a></button>
     </div>
 
 {% endif %}
