@@ -26,18 +26,17 @@ def group_chat_room(request, group_id):
 @login_required
 def private_chat_room(request, sender_id, receiver_id):
     sender = User.objects.get(pk=sender_id)
-    receiver = User.objects.get(id=receiver_id)
+    receiver_id = User.objects.get(id=receiver_id)
     private_chat_messages = PrivateChatMessage.objects.filter(
-        sender=sender, receiver=receiver
+        sender=sender, receiver=receiver_id
     )
 
-    private_group = sender.friends.filter(receiver=receiver)
+    private_group = sender.friends.filter(receiver=receiver_id)
     if private_group.count() == 0:
         return HttpResponseForbidden()
 
     context = {
-        "sender": sender,
-        "receiver": receiver,
+        "receiver_id": receiver_id,
         "private_group": private_group,
         "private_chat_messages": private_chat_messages,
     }
