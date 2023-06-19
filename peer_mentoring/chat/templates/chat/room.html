@@ -3,6 +3,17 @@
 {% block title %}Chat room for "{{group.title}}" {% endblock %}
 
 {% block content %}
+<div id="chatHistory">
+  <h2>Chat room for "{{group.title}}"</h2>
+  {% for message in chat_messages %}
+    <div class="message{% if request.user == message.user %}me{% else %}other{% endif %}">
+      <strong>{{message.user.username}}</strong>
+      <span class="date">{{message.added|timesince}} ago</span>
+      <br>
+      {{message.message}}
+    </div>
+  {% endfor %}
+</div>
 <div id="chat">
 </div>
 <div id="chat_input">

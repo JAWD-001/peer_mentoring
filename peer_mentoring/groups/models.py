@@ -34,7 +34,7 @@ class Group(models.Model):
         user, on_delete=models.CASCADE, related_name="moderator"
     )
     banned_users = models.ManyToManyField(
-        User, related_name="banned_from_groups", null=True, blank=True
+        User, related_name="banned_from_groups", blank=True
     )
     # banned = models.ManyToManyField(user)
 
@@ -80,6 +80,9 @@ class Post(models.Model):
     added = models.DateTimeField(auto_now_add=True, null=False, blank=False)
     group = models.ForeignKey(Group, on_delete=models.CASCADE, blank=True, null=True)
 
+    class Meta:
+        ordering = ("-added",)
+
     def __str__(self):
         return self.title
 
@@ -97,6 +100,9 @@ class Comment(models.Model):
     content = models.TextField(max_length=200, blank=False, null=True)
     added = models.DateTimeField(auto_now_add=True, null=False, blank=False)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ("-added",)
 
     def __str__(self):
         return self.content

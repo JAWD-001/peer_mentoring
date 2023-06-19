@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
+from django.db.models import Count
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
@@ -51,7 +52,7 @@ def groups_moderated(request):
 @login_required
 def group_detail(request, group_id):
     group = get_object_or_404(Group, pk=group_id)
-    posts = Post.objects.filter(group=group_id)
+    posts = Post.objects.filter(group=group_id).annotate(comment_count=Count("comment"))
     members = group.members.all()
     if GroupJoinRequest.objects.filter(sender=request.user, group=group).exists():
         messages.error(request, "Group request is being processed")
@@ -142,9 +143,9 @@ def accept_join_request(request, join_request_id):
     group.members.add(join_request.sender)
     join_request.delete()
     messages.success(
-        request, f"{join_request.user.username} has been added to the group."
+        request, f"{join_request.sender.username} has been added to the group."
     )
-    return redirect("groups:manage_group_join_requests", group_id=group.id)
+    return redirect("groups:group_home", group_id=group.id)
 
 
 @login_required
