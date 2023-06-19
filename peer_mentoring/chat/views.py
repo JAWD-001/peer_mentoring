@@ -40,7 +40,7 @@ def private_chat_room(request, sender_id, receiver_id):
         "private_group": private_group,
         "private_chat_messages": private_chat_messages,
     }
-    return render(request, "chat/room.html", context)
+    return render(request, "chat/private_chatroom.html", context)
     """
     Have to make the template and test, but have this refactored so far
     """
