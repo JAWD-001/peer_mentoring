@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% load bootstrap5 %}
 
-{% block title %}Chat room for "{{group.title}}" {% endblock %}
+{% block title %}Private chat with "{{receiver.username}}" {% endblock %}
 
 {% block content %}
 <div id="chatHistory">
-  <h2>Chat room for "{{group.title}}"</h2>
+  <h2>Private chat with "{{receiver.username}}"</h2>
   {% for message in chat_messages %}
     <div class="message{% if request.user == message.user %}me{% else %}other{% endif %}">
       <strong>{{message.user.username}}</strong>
@@ -25,19 +25,19 @@
 {% endblock %}
 
 {% block include_js %}
-    {{ group.id|json_script:"group-id" }}
+    {{ receiver_id|json_script:"receiver-id" }}
     {{ request.user.username|json_script:"request-user" }}
 {% endblock %}
 
 {% block domready %}
-  const groupId = JSON.parse(
-    document.getElementById('group-id').textContent
+  const receiverId = JSON.parse(
+    document.getElementById('receiver-id').textContent
   );
   const requestUser = JSON.parse(
     document.getElementById('request-user').textContent
   );
   const url = 'ws://' + window.location.host +
-               '/ws/chat/room/' + groupId + '/';
+              '/ws/chat/private/' + receiverId + '/';
   const chatSocket = new WebSocket(url);
 
   chatSocket.onmessage = function(event) {
@@ -53,7 +53,7 @@
     chat.innerHTML += '<div class="message' + source + '">' +
                       '<strong>' + name+ '</strong>' +
                       '<span class="date">' + datetime + '</span><br>' +
-                       data.message + '</div>';
+                      data.message + '</div>';
     chat.scrollTop = chat.scrollHeight;
   };
 
