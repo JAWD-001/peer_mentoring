@@ -11,15 +11,15 @@
         <p class="card-text">{{profile.user.title}}</p>
       </div>
       {% if profile != request.user %}
-      {% if profile not in request.user.userprofile.friends.all %}
-      <div>
-        <form method="post" id="friend_request" action="{% url 'account_management:send_request' user_id=profile.user.id %}" style="display:inline;">
-          {% csrf_token %}
-          <input type="hidden" name="user_id" value="{{ profile.user.id }}">
-          <button type="submit" class="btn btn-primary">Add Friend</button>
-        </form>
-      </div>
-      {% endif %}
+        {% if profile not in request.user.userprofile.friends.all %}
+        <div>
+          <form method="post" id="friend_request" action="{% url 'account_management:send_request' user_id=profile.user.id %}" style="display:inline;">
+            {% csrf_token %}
+            <input type="hidden" name="user_id" value="{{ profile.user.id }}">
+            <button type="submit" class="btn btn-primary">Add Friend</button>
+          </form>
+        </div>
+        {% endif %}
       {% endif %}
     </div>
   {% endfor %}

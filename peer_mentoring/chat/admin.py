@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import ChatMessage
+from .models import ChatMessage, PrivateChatMessage
 
 
 @admin.register(ChatMessage)
@@ -11,3 +11,8 @@ class ChatMessageAdmin(admin.ModelAdmin):
         "group",
         "user",
     )
+
+
+@admin.register(PrivateChatMessage)
+class PrivateChatMessageAdmin(admin.ModelAdmin):
+    list_display = ("sender", "receiver", "message", "added")

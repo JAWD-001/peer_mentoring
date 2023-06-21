@@ -6,9 +6,8 @@ app_name = "chat"
 
 urlpatterns = [
     path("room/group/<int:group_id>/", views.group_chat_room, name="group_chat_room"),
-    # TODO: private chat
     path(
-        "room/sender/<int:sender>/receiver/<int:receiver>",
+        "room/sender/<int:sender_id>/receiver/<int:receiver_id>",
         views.private_chat_room,
         name="private_chat_room",
     ),
