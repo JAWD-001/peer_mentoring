@@ -55,6 +55,7 @@ class PrivateChatConsumer(AsyncWebsocketConsumer):
         ids = sorted([self.sender.id, int(self.receiver_id)])
         self.room_group_name = f"private_chat_{ids[0]}_{ids[1]}"
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
+        print(f'Received connect request from {self.scope["user"]}')
         await self.accept()
 
     async def disconnect(self, close_code):
@@ -66,7 +67,7 @@ class PrivateChatConsumer(AsyncWebsocketConsumer):
         now = timezone.now()
 
         # only allow messages from the two users in the chat
-        if self.sender.id == int(self.receiver_id) or self.sender.id == int(
+        if self.scope["user"].id == self.sender.id or self.scope["user"].id == int(
             self.receiver_id
         ):
             await self.channel_layer.group_send(
@@ -83,10 +84,15 @@ class PrivateChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def save_chat_message(self, message, now):
-        sender = User.objects.get(id=self.sender_id)
+        sender_user = User.objects.get(
+            pk=self.sender.id
+        )  # assuming self.sender is a User instance
+        receiver_user = User.objects.get(
+            pk=int(self.receiver_id)
+        )  # get receiver as a User instance
         PrivateChatMessage.objects.create(
-            reciever=self.receiver_id,
-            sender=sender,
+            sender=sender_user,
+            receiver=receiver_user,
             message=message,
             added=now.isoformat(),
         )
