@@ -11,11 +11,6 @@ User = get_user_model()
 # from groups.views import groups_moderated
 
 
-@pytest.mark.django_db
-def test_groups_moderated_view():
-    pass
-
-
 @pytest.fixture
 def avatar(db):
     avatar = Avatar(name="Test Avatar")
@@ -58,3 +53,8 @@ def test_group_title(group):
 
 def test_group_can_join(group, user):
     assert not group.can_join(user)  # noqa: S101
+
+
+@pytest.mark.django_db
+def test_groups_moderated_view():
+    pass
