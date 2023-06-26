@@ -2,12 +2,17 @@
 {% load bootstrap5 %}
 
 {% block content %}
-    <h1>{{ user.username }}'s Profile</h1>
-{% if user in request.user.userprofile.friends.all %}
+  <h1>{{ user.username }}'s Profile</h1>
+
+  {% if user.userprofile in request.user.userprofile.friends.all %}
     <div>
         <small>Check out your mentor's page!</small>
     </div>
-{% elif request.user != user and user not in request.user.userprofile.friends.all %}
+    <div class="private-chat-link">
+      <a class="btn btn-primary" href="{% url 'chat:private_chat_room' request.user.id user.id %}">Chat here!</a></button>
+    </div>
+
+  {% elif request.user != user and user.userprofile not in request.user.userprofile.friends.all %}
     <div>
         <form method="post" id="friend_request" action="{% url 'account_management:send_request' user.id %}" style="display:inline;">
             {% csrf_token %}
@@ -15,21 +20,16 @@
             <button type="submit" class="btn btn-primary">Add Friend</button>
         </form>
     </div>
-{% else %}
-    <div class="private-chat-link">
-      <a class="btn btn-primary" href="{% url 'chat:private_chat_room' sender=request.user receiver.id %}">Chat here!</a></button>
-    </div>
+  {% endif %}
 
-{% endif %}
+  <h2>Posts</h2>
+  {% for post in user.username.posts.all %}
+  <p>{{ post.content }}</p>
+  {% endfor %}
 
-<h2>Posts</h2>
-{% for post in user.username.posts.all %}
-<p>{{ post.content }}</p>
-{% endfor %}
-
-<h2>Comments</h2>
-{% for comment in user.comments.all %}
-<p>{{ comment.content }}</p>
-{% endfor %}
+  <h2>Comments</h2>
+  {% for comment in user.comments.all %}
+  <p>{{ comment.content }}</p>
+  {% endfor %}
 
 {% endblock %}

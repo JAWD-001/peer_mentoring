@@ -26,21 +26,20 @@ def group_chat_room(request, group_id):
 @login_required
 def private_chat_room(request, sender_id, receiver_id):
     sender = User.objects.get(pk=sender_id)
-    receiver_id = User.objects.get(id=receiver_id)
+    receiver = User.objects.get(id=receiver_id)
+
     private_chat_messages = PrivateChatMessage.objects.filter(
-        sender=sender, receiver=receiver_id
+        sender=sender, receiver=receiver
     )
 
-    private_group = sender.friends.filter(receiver=receiver_id)
+    private_group = sender.userprofile.friends.filter(user=receiver)
     if private_group.count() == 0:
         return HttpResponseForbidden()
 
     context = {
+        "receiver": receiver,
         "receiver_id": receiver_id,
         "private_group": private_group,
         "private_chat_messages": private_chat_messages,
     }
     return render(request, "chat/private_chatroom.html", context)
-    """
-    Have to make the template and test, but have this refactored so far
-    """
