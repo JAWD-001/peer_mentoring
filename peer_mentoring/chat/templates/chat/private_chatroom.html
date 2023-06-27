@@ -6,7 +6,7 @@
 {% block content %}
 <div id="chatHistory">
   <h2>Private chat with "{{receiver.username}}"</h2>
-  {% for message in chat_messages %}
+  {% for message in private_chat_messages %}
     <div class="message{% if request.user == message.user %}me{% else %}other{% endif %}">
       <strong>{{message.user.username}}</strong>
       <span class="date">{{message.added|timesince}} ago</span>
