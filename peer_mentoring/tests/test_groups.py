@@ -85,7 +85,7 @@ def test_group_index_POST(client_authenticated, user, avatar, category):
     assert response.status_code == 302  # Check redirect  # noqa: S101
     assert Group.objects.filter(  # noqa: S101
         title="Test Group"
-    ).exists()  # Check if the group was created  # noqa: S101
+    ).exists()  # Check if the group was created
 
 
 @pytest.mark.django_db
