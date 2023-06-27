@@ -89,5 +89,38 @@ def test_group_index_POST(client_authenticated, user, avatar, category):
 
 
 @pytest.mark.django_db
+def test_groups_joined_authenticated(client_authenticated, user, group):
+    # Add the user to the group's members
+    group.members.add(user)
+
+    # Log in the user
+    client = client_authenticated
+
+    # Send a GET request to the view
+    response = client.get(reverse("groups:groups_joined"))
+
+    # Assert the response status code is 200 (OK)
+    assert response.status_code == 200  # noqa: S101
+
+    # Assert the user's group is in the response context
+    assert group in response.context["groups"]  # noqa: S101
+
+
+@pytest.mark.django_db
+def test_groups_joined_unauthenticated(client, user, group):
+    # Add the user to the group's members
+    group.members.add(user)
+
+    # Send a GET request to the view without logging in
+    response = client.get(reverse("groups:groups_joined"))
+
+    # Assert the response status code is 302 (redirect)
+    assert response.status_code == 302  # noqa: S101
+
+    # Assert the user is being redirected to the login page
+    assert "login" in response.url  # noqa: S101
+
+
+@pytest.mark.django_db
 def test_groups_moderated_view():
     pass
