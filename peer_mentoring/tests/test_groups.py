@@ -11,9 +11,12 @@ from PIL import Image
 # from groups.views import group_index, groups_moderated
 
 
-"""Fixtures"""
+"""
+Fixtures
+"""
 
 
+# Fixture creates an avatar instance for group fixture
 @pytest.fixture
 def avatar(db):
     avatar = Avatar(name="Test Avatar")
@@ -27,7 +30,7 @@ def avatar(db):
     return avatar
 
 
-# Fixture creates a category instance
+# Fixture creates a category instance for group
 @pytest.fixture
 def category(db):
     return Category.objects.create(name="Test Category")
