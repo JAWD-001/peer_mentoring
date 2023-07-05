@@ -248,3 +248,95 @@ def test_send_group_join_request(
     )
     assert response.status_code == 302  # noqa: S101
     assert group.groupjoinrequest_set.filter(sender=user).exists()  # noqa: S101
+
+
+@pytest.mark.django_db
+def test_group_request_index(client_authenticated, group, join_request):
+    requests = GroupJoinRequest.objects.filter(group=group)
+    response = client_authenticated.get(
+        reverse("groups:group_request_index", kwargs={"group_id": group.id})
+    )
+
+    assert response.status_code == 200  # noqa: S101
+    assert group.id in response.context  # noqa: S101
+    assert requests.exists()  # noqa: S101
+    assert join_request in response.context["requests"]  # noqa: S101
+    assert len(response.context["requests"]) == 1  # noqa: S101
+
+
+def test_accept_join_request(client_authenticated, group, join_request):
+    response = client_authenticated.post(
+        reverse(
+            "groups:group_approve_join", kwargs={"join_request_id": join_request.id}
+        ),
+    )
+
+    assert response.status_code == 302  # noqa: S101
+    assert response.url == reverse(  # noqa: S101
+        "groups:group_request_index", kwargs={"group_id": group.id}
+    )
+    assert not GroupJoinRequest.objects.filter(  # noqa: S101
+        id=join_request.id
+    ).exists()  # noqa: S101
+    assert f"{join_request.sender.username} has been added to the group."  # noqa: S101
+
+
+@pytest.mark.django_db
+def test_reject_join_request(client_authenticated, user, user2, group, join_request):
+    assert GroupJoinRequest.objects.filter(id=join_request.id).exists()  # noqa: S101
+    assert group.moderator == user  # noqa: S101
+
+    response = client_authenticated.post(
+        reverse(
+            "groups:group_reject_request", kwargs={"join_request_id": join_request.id}
+        )
+    )
+
+    assert not GroupJoinRequest.objects.filter(  # noqa: S101
+        id=join_request.id
+    ).exists()  # noqa: S101
+
+    assert f"{join_request.sender.username} has been added to the group."  # noqa: S101
+    assert response.status_code == 302  # noqa: S101
+    assert response.url == reverse(  # noqa: S101
+        "groups:group_request_index", kwargs={"group_id": group.id}
+    )
+
+
+@pytest.mark.django_db
+def test_delete_post(client_authenticated, user, group):
+    post = Post.objects.create(content="Test Content", group=group, author=user)
+    response = client_authenticated.post(
+        reverse("groups:delete_post", kwargs={"group_id": group.id, "post_id": post.id})
+    )
+    assert response.status_code == 302  # noqa: S101
+    assert not Post.objects.filter(id=post.id).exists()  # noqa: S101
+
+
+@pytest.mark.django_db
+def test_delete_comment(client_authenticated, user, group):
+    post = Post.objects.create(content="Test Content", group=group, author=user)
+    comment = Comment.objects.create(content="Test Comment", post=post, author=user)
+    response = client_authenticated.post(
+        reverse(
+            "groups:delete_comment",
+            kwargs={"group_id": group.id, "post_id": post.id, "comment_id": comment.id},
+        )
+    )
+
+    assert response.status_code == 302  # noqa: S101
+    assert not Comment.objects.filter(id=comment.id).exists()  # noqa: S101
+
+
+@pytest.mark.django_db
+def test_ban_user(client_authenticated, user, user2, group):
+    group.moderator = user
+    group.save()
+    response = client_authenticated.post(
+        reverse("groups:ban_user", kwargs={"group_id": group.id, "user_id": user2.id})
+    )
+    group.refresh_from_db()
+
+    assert response.status_code == 302  # noqa: S101
+    assert user2 in group.banned_users.all()  # noqa: S101
+    assert f"{user2.username} has been banned."  # noqa: S101
