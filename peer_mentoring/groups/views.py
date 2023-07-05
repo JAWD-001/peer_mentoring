@@ -126,7 +126,7 @@ def send_group_join_request(request):
 
 def group_request_index(request, group_id):
     group = get_object_or_404(Group, id=group_id)
-    requests = GroupJoinRequest.objects.filter(id=group_id)
+    requests = GroupJoinRequest.objects.filter(group=group)
     context = {
         "group": group,
         "requests": requests,

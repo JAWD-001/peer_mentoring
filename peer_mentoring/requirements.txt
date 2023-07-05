@@ -21,6 +21,8 @@ django-bootstrap-v5==1.0.11
 django-environ==0.9.0
 django-sendgrid-v5==1.2.2
 exceptiongroup==1.1.1
+factory-boy==3.2.1
+Faker==18.11.2
 filelock==3.9.0
 hyperlink==21.0.0
 identify==2.5.20
@@ -42,6 +44,7 @@ PyJWT==2.6.0
 pyOpenSSL==23.0.0
 pytest==7.3.2
 pytest-django==4.5.2
+python-dateutil==2.8.2
 python-decouple==3.7
 python-http-client==3.3.7
 python3-openid==3.2.0

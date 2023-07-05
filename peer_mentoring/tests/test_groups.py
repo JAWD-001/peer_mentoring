@@ -1,11 +1,11 @@
 import io
 
 import pytest
-from django.contrib.auth.models import User
 from django.core.files.base import ContentFile
 from django.test import Client
 from django.urls import reverse
-from groups.models import Avatar, Category, Comment, Group, Post
+from factories import UserFactory
+from groups.models import Avatar, Category, Comment, Group, GroupJoinRequest, Post
 from PIL import Image
 
 # from groups.views import group_index, groups_moderated
@@ -36,17 +36,22 @@ def category(db):
     return Category.objects.create(name="Test Category")
 
 
-# Fixture creates a user instance
+# Creates user instance
 @pytest.fixture
 def user(db):
-    return User.objects.create_user(username="testuser", password="12345")  # noqa: S106
+    return UserFactory()
+
+
+@pytest.fixture
+def user2(db):
+    return UserFactory.create()
 
 
 # fixture handles client authentication
 @pytest.fixture
 def client_authenticated(user):
     client = Client()
-    client.login(username="testuser", password="12345")  # noqa: S106
+    client.login(username=user.username, password="12345")  # noqa: S106
     return client
 
 
@@ -62,6 +67,13 @@ def group(db, avatar, category, user):
     )
     group.members.add(user)
     return group
+
+
+@pytest.fixture
+def join_request(db, user, user2, group):
+    return GroupJoinRequest.objects.create(
+        sender=user, receiver=group.moderator, group=group
+    )
 
 
 # Fixture to make post instance
@@ -225,3 +237,14 @@ def test_group_show_post_POST(client_authenticated, user, group, post):
     assert Comment.objects.filter(  # noqa: S101
         content="Test comment.", author=user, post=post
     ).exists()
+
+
+@pytest.mark.django_db
+def test_send_group_join_request(
+    client_authenticated, user, user2, group, join_request
+):
+    response = client_authenticated.post(
+        reverse("groups:send_group_join_request"), data={"group_id": group.id}
+    )
+    assert response.status_code == 302  # noqa: S101
+    assert group.groupjoinrequest_set.filter(sender=user).exists()  # noqa: S101
