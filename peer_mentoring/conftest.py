@@ -1,6 +1,13 @@
 import io
 
 import pytest
+from account_management.models import (
+    FriendRequest,
+    Interest,
+    Notification,
+    Photo,
+    UserProfile,
+)
 from django.core.files.base import ContentFile
 from django.test import Client
 from groups.models import Avatar, Category, Comment, Group, GroupJoinRequest, Post
@@ -38,7 +45,7 @@ def category(db):
 # Creates user instance
 @pytest.fixture
 def user(db):
-    return UserFactory()
+    return UserFactory.create()
 
 
 @pytest.fixture
@@ -96,4 +103,58 @@ def comment(db, user, post):
         author=user,
         content="Test",
         post=post,
+    )
+
+
+@pytest.fixture
+def interest(db):
+    return Interest.objects.create(
+        name="Interest1",
+        image=ContentFile(b"image_content", name="test.png"),
+    )
+
+
+@pytest.fixture
+def photo(db, user):
+    photo = Photo(name="Test Photo")
+    img = Image.new("RGB", (60, 30), color=(73, 109, 137))  # creating a dummy image
+    img_file = io.BytesIO()
+    img.save(img_file, format="JPEG")
+    img_file.name = "test_photo.jpg"
+    img_file.seek(0)
+    photo.image.save(img_file.name, ContentFile(img_file.read()))
+    photo.save()
+    return photo
+    return Photo.objects.create(
+        image=ContentFile(b"image_content", name="test.png"),
+        description="A cool photo",
+        user=user,
+    )
+
+
+@pytest.fixture
+def user_profile(db, user, photo, interest):
+    profile = UserProfile.objects.create(
+        user=user, avatar=photo, title="Some Title", bio="This is a bio"
+    )
+    profile.interests.add(interest)
+    return profile
+
+
+@pytest.fixture
+def friend_request(db, user_profile):
+    # Create another user for the friend request
+    user2 = UserFactory.create()
+    profile2 = UserProfile.objects.create(user=user2)
+
+    return FriendRequest.objects.create(
+        sender=user_profile,
+        receiver=profile2,
+    )
+
+
+@pytest.fixture
+def notification(db, user_profile):
+    return Notification.objects.create(
+        receiver=user_profile, text="You have a new notification"
     )

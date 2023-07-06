@@ -2,22 +2,19 @@ import pytest
 from django.urls import reverse
 from groups.models import Comment, Group, GroupJoinRequest, Post
 
+
 # from groups.views import group_index, groups_moderated
-
-
-"""
-View Tests
-"""
-
-
+@pytest.mark.django_db
 def test_group_title(group):
     assert group.title == "Test Group"  # noqa: S101
 
 
+@pytest.mark.django_db
 def test_group_can_join(group, user):
     assert not group.can_join(user)  # noqa: S101
 
 
+@pytest.mark.django_db
 def test_group_index_GET(client_authenticated):
     response = client_authenticated.get(reverse("groups:group_home"))
     assert response.status_code == 200  # noqa: S101
@@ -25,6 +22,7 @@ def test_group_index_GET(client_authenticated):
     assert "groups" in response.context  # noqa: S101
 
 
+@pytest.mark.django_db
 def test_group_index_POST(client_authenticated, user, avatar, category):
     new_group = {
         "title": "Test Group",
@@ -41,57 +39,37 @@ def test_group_index_POST(client_authenticated, user, avatar, category):
 
 @pytest.mark.django_db
 def test_groups_joined_authenticated(client_authenticated, user, group):
-    # Add the user to the group's members
     group.members.add(user)
 
-    # Log in the user
     client = client_authenticated
-
-    # Send a GET request to the view
     response = client.get(reverse("groups:groups_joined"))
 
-    # Assert the response status code is 200 (OK)
     assert response.status_code == 200  # noqa: S101
-
-    # Assert the user's group is in the response context
     assert group in response.context["groups"]  # noqa: S101
 
 
 # tests groups_joined_unauthenticated
 @pytest.mark.django_db
 def test_groups_joined_unauthenticated(client, user, group):
-    # Add the user to the group's members
     group.members.add(user)
 
-    # Send a GET request to the view without logging in
     response = client.get(reverse("groups:groups_joined"))
-
-    # Assert the response status code is 302 (redirect)
     assert response.status_code == 302  # noqa: S101
-
-    # Assert the user is being redirected to the login page
     assert "login" in response.url  # noqa: S101
 
 
 # test groups_moderated view
 @pytest.mark.django_db
 def test_groups_moderated(client_authenticated, user, group):
-    # Send a GET request to the view
     response = client_authenticated.get(reverse("groups:groups_moderated"))
 
-    # Assert the response status code is 200 (OK)
     assert response.status_code == 200  # noqa: S101
-
-    # Assert the user's group is in the response context
     assert group in response.context["groups"]  # noqa: S101
-
-    # Assert the response contains the title of the group
     assert group.title in str(response.content)  # noqa: S101
 
 
+@pytest.mark.django_db
 def test_group_detail_GET(client_authenticated, user, group):
-    # Add the user to the group's members
-
     group.members.add(user)
 
     # Send a GET request to the view
@@ -99,31 +77,21 @@ def test_group_detail_GET(client_authenticated, user, group):
         reverse("groups:group_detail", kwargs={"group_id": group.id})
     )
 
-    # Assert the response status code is 200 (OK)
     assert response.status_code == 200  # noqa: S101
-
-    # Assert that user in group members
     assert user in group.members.all()  # noqa: S101
-
-    # Assert the response contains the title of the group
     assert group.title in str(response.content)  # noqa: S101
 
 
 @pytest.mark.django_db
 def test_group_detail_POST(client_authenticated, post):
-    # Add the user to the post's group members
     post.group.members.add(post.author)
 
-    # Send a POST request to the view
     response = client_authenticated.post(
         reverse("groups:group_detail", kwargs={"group_id": post.group.id}),
         data={"title": post.title, "content": post.content},
     )
 
-    # Assert the response status code is 302 (Redirection)
     assert response.status_code == 302  # noqa: S101
-
-    # Assert a new post has been added to the group
     assert Post.objects.filter(  # noqa: S101
         group=post.group, content=post.content, title=post.title
     ).exists()
@@ -134,6 +102,7 @@ def test_comment_created(comment):
     assert comment.content == "Test"  # noqa: S101
 
 
+@pytest.mark.django_db
 def test_group_show_post_GET(client_authenticated, user, group, post, comment):
     url = reverse("groups:show_post", kwargs={"group_id": group.id, "post_id": post.id})
     response = client_authenticated.get(url)
@@ -178,6 +147,7 @@ def test_group_request_index(client_authenticated, group, join_request):
     assert len(response.context["requests"]) == 1  # noqa: S101
 
 
+@pytest.mark.django_db
 def test_accept_join_request(client_authenticated, group, join_request):
     response = client_authenticated.post(
         reverse(
