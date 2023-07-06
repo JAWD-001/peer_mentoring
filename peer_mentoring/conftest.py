@@ -124,9 +124,8 @@ def photo(db, user):
     img_file.seek(0)
     photo.image.save(img_file.name, ContentFile(img_file.read()))
     photo.save()
-    return photo
-    return Photo.objects.create(
-        image=ContentFile(b"image_content", name="test.png"),
+    return photo(
+        image=photo,
         description="A cool photo",
         user=user,
     )
