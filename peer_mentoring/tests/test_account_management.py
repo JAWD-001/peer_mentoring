@@ -71,6 +71,7 @@ def test_view_profile(client_authenticated, user_profile, user):
     assert response.context["user"] == user  # noqa: S101
 
 
+@pytest.mark.django_db
 def test_user_index(client_authenticated, user_profile):
     response = client_authenticated.get(reverse("account_management:user_index"))
 
@@ -80,6 +81,7 @@ def test_user_index(client_authenticated, user_profile):
         assert profile != request.user  # noqa: S101
 
 
+@pytest.mark.django_db
 def test_mentor_index(client_authenticated, user_profile, user):
     response = client_authenticated.get(reverse("account_management:mentor_index"))
 
@@ -89,6 +91,7 @@ def test_mentor_index(client_authenticated, user_profile, user):
         assert mentor != request.user  # noqa: S101
 
 
+@pytest.mark.django_db
 def test_send_friend_request(client_authenticated, user_profile, user):
     response = client_authenticated.post(
         reverse("account_management:send_request", kwargs={"user_id": user.id})
