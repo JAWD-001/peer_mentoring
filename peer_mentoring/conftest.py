@@ -9,6 +9,7 @@ from account_management.models import (
     Photo,
     UserProfile,
 )
+from django.contrib.auth.models import User
 from django.core.files.base import ContentFile
 from django.core.files.images import ImageFile
 from django.test import Client
@@ -154,14 +155,16 @@ def user_profile2(db, user2, photo, interest):
 
 @pytest.fixture
 def friend_request(db, user_profile):
-    # Create another user for the friend request
-    user2 = UserFactory.create()
-    profile2 = UserProfile.objects.create(user=user2)
-
-    return FriendRequest.objects.create(
-        sender=user_profile,
-        receiver=profile2,
+    sender = User.objects.create(username="sender", password="123")  # noqa: S106
+    sender_profile = sender.userprofile
+    sender_profile.title = "Some Other Title"
+    sender_profile.save()
+    receiver = user_profile
+    friend_request = FriendRequest.objects.create(
+        sender=sender_profile, receiver=receiver
     )
+
+    return friend_request
 
 
 @pytest.fixture
