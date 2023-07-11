@@ -16,7 +16,9 @@
 {% if request.user.is_authenticated %}
   Welcome back {{request.user.username}} <a href="{% url 'account_logout' %}">logout</a>
 {% else %}
-  splash page here
+
+  {% include "account_management/splash.html" %}
+
 {% endif %}
 
 {% endblock %}
