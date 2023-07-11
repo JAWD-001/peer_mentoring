@@ -126,7 +126,7 @@ def send_group_join_request(request):
 
 def group_request_index(request, group_id):
     group = get_object_or_404(Group, id=group_id)
-    requests = GroupJoinRequest.objects.filter(id=group_id)
+    requests = GroupJoinRequest.objects.filter(group=group)
     context = {
         "group": group,
         "requests": requests,
@@ -145,7 +145,7 @@ def accept_join_request(request, join_request_id):
     messages.success(
         request, f"{join_request.sender.username} has been added to the group."
     )
-    return redirect("groups:group_home", group_id=group.id)
+    return redirect("groups:group_request_index", group_id=group.id)
 
 
 @login_required
@@ -155,7 +155,10 @@ def reject_join_request(request, join_request_id):
     if group.moderator != request.user:
         raise PermissionDenied()
     join_request.delete()
-    messages.success(request, f"{join_request.user.username}'s join request was denied")
+    messages.success(
+        request, f"{join_request.sender.username}'s join request was denied"
+    )
+    return redirect("groups:group_request_index", group_id=group.id)
 
 
 @login_required
@@ -164,9 +167,10 @@ def delete_post(request, group_id, post_id):
     post = get_object_or_404(Post, id=post_id)
     if group.moderator != request.user:
         messages.error(request, "You don't have permission to delete the post.")
+        return redirect("group:group_detail", group_id=group.id)
     post.delete()
     messages.success(request, "Post has been deleted.")
-    return redirect("group:group_detail", group_id=group.id)
+    return redirect("groups:group_detail", group_id=group.id)
 
 
 @login_required
@@ -176,6 +180,7 @@ def delete_comment(request, group_id, post_id, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
     if group.moderator != request.user:
         messages.error(request, "You don't have permission to delete the comment")
+        return redirect("group:group_detail", group_id=group.id)
     comment.delete()
     messages.success(request, "Comment has been deleted.")
     return redirect("groups:show_post", group_id=group.id, post_id=post.id)
@@ -186,6 +191,7 @@ def ban_user(request, group_id, user_id):
     group = get_object_or_404(Group, id=group_id)
     if group.moderator != request.user:
         messages.error(request, "You don't have access to ban users")
+        return redirect("groups:group_detail", group_id=group.id)
     user_to_ban = get_object_or_404(User, id=user_id)
     group.banned_users.add(user_to_ban)
     messages.success(request, f"{user_to_ban.username} has been banned.")
