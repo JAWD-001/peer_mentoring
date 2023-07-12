@@ -16,7 +16,6 @@ release = "2023"
 
 extensions = [
     "sphinx.ext.autodoc",
-    "myst_parser",
 ]
 
 templates_path = ["_templates"]
