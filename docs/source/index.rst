@@ -7,7 +7,7 @@ Welcome to peer_mentoring's documentation!
 ==========================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 4
    :caption: Contents:
 
    account_management/modules
