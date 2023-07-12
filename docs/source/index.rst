@@ -10,6 +10,10 @@ Welcome to peer_mentoring's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   account_management/modules
+   chat/modules
+   groups/modules
+   search/modules
 
 
 Indices and tables
