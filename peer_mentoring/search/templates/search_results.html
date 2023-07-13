@@ -1,24 +1,40 @@
-{% extends 'base.html' %}
-{% load bootstrap5 %}
+    {% extends 'base.html' %}
+    {% load bootstrap5 %}
+    {% load static %}
 
-{% block content %}
+    {% block content %}
 
-    {% if user_results or group_results %}
-        <h2>Users</h2>
-        <ul>
-        {% for user in user_results %}
-            <li><a>{{ user.username }}</a></li>
-        {% endfor %}
-        </ul>
+    <div style="height: 100%; display:flex; justify-content: center;">
+        {% if user_results or group_results %}
+        <div style="display:flex; gap:128px; align-items: center; overflow: scroll; flex-wrap: wrap; justify-content: center; padding:24px;">
 
-        <h2>Groups</h2>
-        <ul>
-        {% for group in group_results %}
-          <li><a href="#">{{ group.title }}</a></li>
-        {% endfor %}
-        </ul>
-    {% else %}
+
+            <div style="background: #0d6efd; height:70%; padding:24px; min-width: 300px;border-radius: 5px; color:white">
+                <h2>Users</h2>
+                <ul>
+                    {% for user in user_results %}
+                    <li><a style="text-decoration: none">{{ user.username }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+
+            <div style="background: #0d6efd; height:70%; padding:24px; min-width: 300px;border-radius: 5px;color: white">
+                <h2>Groups</h2>
+                <ul>
+                    {% for group in group_results %}
+                    <li><a style="text-decoration: none; color:white;" href="#">{{ group.title }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+
+        </div>
+
+        {% else %}
         <p>No results found.</p>
-    {% endif %}
+        {% endif %}
 
-{% endblock %}
+    </div>
+
+    {% endblock %}

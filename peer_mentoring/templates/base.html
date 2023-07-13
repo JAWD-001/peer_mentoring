@@ -1,7 +1,7 @@
 {% load bootstrap5 %}
 
   <!DOCTYPE html>
-  <html>
+<html style="height: 90%" xmlns="http://www.w3.org/1999/html">
     <head>
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,8 +12,7 @@
       {% bootstrap_javascript %}
       {% block extra_head %}{% endblock %}
     </head>
-    <body>
-
+    <body style="height: 90%">
       {% if user.is_authenticated %}
       <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
@@ -64,6 +63,7 @@
       {% endblock %}
 
 
+
       {% else %}
 
       <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -94,22 +94,12 @@
           </div>
         </div>
       </nav>
-    </body>
 
-      <main>
-        {% bootstrap_messages %}
-        <!-- FOOTER -->
-        <footer class="container">
-          <p class="float-end"><a href="#">Back to top</a></p>
-          <p>© 2017–2021 Company, Inc. · <a href="#">Privacy</a> · <a href="#">Terms</a></p>
-        </footer>
-      </main>
-      {% endif %}
-
-      {% block extra_body %}
+   {% endif %}
+            {% block extra_body %}
       {% endblock %}
 
-      {% block include_js %}
+         {% block include_js %}
       {% endblock %}
       <script>
         document.addEventListener('DOMContentLoaded', (event) => {
@@ -118,5 +108,10 @@
           {% endblock %}
         })
       </script>
+                      <!-- FOOTER -->
+      <footer class="container">
+        <p class="float-end"><a href="#">Back to top</a></p>
+        <p>© 2017–2021 Company, Inc. · <a href="#">Privacy</a> · <a href="#">Terms</a></p>
+      </footer>
     </body>
   </html>
