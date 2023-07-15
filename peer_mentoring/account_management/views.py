@@ -72,7 +72,7 @@ def user_index(request):
 
 @login_required
 def mentor_index(request):
-    mentors = request.user.userprofile.friends.all()
+    mentors = request.user.userprofile.friends.all().exclude(user=request.user)
     context = {
         "mentors": mentors,
     }

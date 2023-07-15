@@ -94,12 +94,11 @@
           </div>
         </div>
       </nav>
-
-   {% endif %}
-            {% block extra_body %}
+      {% endif %}
+      {% block extra_body %}
       {% endblock %}
 
-         {% block include_js %}
+      {% block include_js %}
       {% endblock %}
       <script>
         document.addEventListener('DOMContentLoaded', (event) => {
