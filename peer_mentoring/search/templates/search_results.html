@@ -3,13 +3,11 @@
     {% load static %}
 
     {% block content %}
-
     <div style="height: 100%; display:flex; justify-content: center;">
         {% if user_results or group_results %}
         <div style="display:flex; gap:128px; align-items: center; overflow: scroll; flex-wrap: wrap; justify-content: center; padding:24px;">
 
-
-            <div style="background: #0d6efd; height:70%; padding:24px; min-width: 300px;border-radius: 5px; color:white">
+            <div class="user-search-background" style="background: #0d6efd; height:70%; padding:24px; min-width: 300px;border-radius: 5px; color:white">
                 <h2>Users</h2>
                 <ul>
                     {% for user in user_results %}
@@ -19,7 +17,7 @@
             </div>
 
 
-            <div style="background: #0d6efd; height:70%; padding:24px; min-width: 300px;border-radius: 5px;color: white">
+            <div class="groups-search-background" style="background: #0d6efd; height:70%; padding:24px; min-width: 300px;border-radius: 5px;color: white">
                 <h2>Groups</h2>
                 <ul>
                     {% for group in group_results %}
