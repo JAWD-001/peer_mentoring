@@ -1,92 +1,112 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% load static %}
 {% load bootstrap5 %}
 
 {% block content %}
+<div style="height:100%; display:flex; flex-direction:column; justify-content: center;">
 
-<h2>{{ user.username }}</h2>
+  <div style="height: 90%; display: flex; flex-direction: column; overflow: scroll">
 
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  Update Profile
-</button>
+  <div style="display:flex; gap: 48px; padding:32px">
+    <img style="height: 300px; width: 300px; border: 2px solid black; border-radius: 4px" src="" />
+    <div style="display: flex; flex-direction: column; gap: 24px">
+      <h2>{{ user.username }}</h2>
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Update Profile Form</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      <div>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+          Update Profile
+        </button>
+
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#photo_upload">
+          Upload Photo
+        </button>
       </div>
-      <div class="modal-body">
-        <form method="post" action="" id="update_profile">
-          {% csrf_token %}
-          {% bootstrap_form form %}
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary" form_id="update_profile">Update Profile</button>
-          </div>
-        </form>
+
+      <div>
+        <li><a href="{% url 'account_email' %}">Change E-mail</a></li>
+        <li><a href="{% url 'account_change_password' %}">Change Password</a></li>
       </div>
     </div>
   </div>
-</div>
 
 
-
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#photo_upload">
-  Upload Photo
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="photo_upload" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="photo_upload">Update New Photo</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form method="post" action="" id="photo_upload" enctype="multipart/form-data">
-          {% csrf_token %}
-          {% bootstrap_form photo_upload %}
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary" form_id="photo_upload">Upload New Photo</button>
-          </div>
-        </form>
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Update Profile Form</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="post" action="" id="update_profile">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary" form_id="update_profile">Update Profile</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<li><a href="{% url 'account_email' %}">Change E-mail</a></li>
-<li><a href="{% url 'account_change_password' %}">Change Password</a></li>
-{% if post in recent_posts %}
-<div class="list-group">
-  {% for post in recent_posts %}
-  <a href="{% url 'groups:show_post' post_id %}" class="list-group-item list-group-item-action active" aria-current="true">
-    <div class="d-flex w-100 justify-content-between">
-      <h5 class="mb-1">{{ post.title }}</h5>
-      <small>{{ post.added|timesince }} ago</small>
-    </div>
-    <p class="mb-1">{{ post.content }}</p>
-    <small>{{ post.group }}</small>
-  </a>
-</div>
-  {% endfor %}
-  {% endif %}
-
-  {% if comment in recent_comments %}
-  <div class="list-group">
-    {% for comment in recent_comments %}
-    <a href="{% url 'groups:show_post' post_id %}" class="list-group-item list-group-item-action active" aria-current="true">
-      <div class="d-flex w-100 j fustify-content-between">
-        <h5 class="mb-1">{{ comment.post.title }}</h5>
-        <small>{{ comment.added|timesince }} ago</small>
+  <!-- Modal -->
+  <div class="modal fade" id="photo_upload" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="photo_upload">Update New Photo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form method="post" action="" id="photo_upload" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  {% bootstrap_form photo_upload %}
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" form_id="photo_upload">Upload New Photo</button>
+                  </div>
+                </form>
+              </div>
+          </div>
       </div>
-      <p class="mb-1">{{ comment.content }}</p>
-      <small>{{ comment.post }}</small>
-    </a>
+  </div>
+
+  <div class="post-list-group" style="padding:32px;">
+    <p>Post Activity</p>
+    {% for post in recent_posts %}
+    <div style="margin-top:12px; border-radius: 4px;">
+      <a href="" class="list-group-item list-group-item-action active" aria-current="true">
+        <div class="d-flex w-100 justify-content-between">
+          <h5 class="mb-1">{{ post.title }}</h5>
+          <small>{{ post.added|timesince }} ago</small>
+        </div>
+        <p class="mb-1">{{ post.content }}</p>
+        <small>{{ post.group }}</small>
+      </a>
+          </div>
     {% endfor %}
-    {% endif %}
-    {% endblock %}
+
+  </div>
+
+  <div class="comment-list-group" style="padding: 0px 32px;">
+    <p> Comment Activity</p>
+    {% for comment in recent_comments %}
+    <div style="margin-top: 12px; border-radius: 4px">
+        <a href="" class="list-group-item list-group-item-action active" aria-current="true">
+          <div class="d-flex w-100 j fustify-content-between">
+            <h5 class="mb-1">{{ comment.post.title }}</h5>
+            <small>{{ comment.added|timesince }} ago</small>
+          </div>
+          <p class="mb-1">{{ comment.content }}</p>
+          <small>{{ comment.post }}</small>
+        </a>
+          </div>
+    {% endfor %}
+
+  </div>
+</div>
+</div>
+  {% endblock %}
