@@ -1,124 +1,120 @@
 {% load bootstrap5 %}
+{% load static %}
 
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block head_title %}{% endblock %}</title>
-    {% bootstrap_css %}
-    {% bootstrap_javascript %}
-    {% block extra_head %}{% endblock %}
-  </head>
-  <body>
-
-  {% if user.is_authenticated %}
-
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="{% url 'account_management:home' %}">ManUp</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="{% url 'account_management:profile_home' %}">Profile</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="{% url 'account_management:user_index' %}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Mentors
-          </a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="{% url 'account_management:user_index' %}">Find A Mentor</a></li>
-            <li><a class="dropdown-item" href="{% url 'account_management:request_index' %}">Your Mentor Requests</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="{% url 'account_management:mentor_index' %}">Your Mentors</a></li>
-          </ul>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="{% url 'groups:group_home' %}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Groups
-          </a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="{% url 'groups:group_home' %}">Find A Group</a></li>
-            <li><a class="dropdown-item" href="{% url 'groups:groups_joined' %}">Your Groups</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="{% url 'groups:groups_moderated' %}">Groups You Manage</a></li>
-          </ul>
-        </li>
-      </ul>
-      <form method="get" action="{% url 'search:results' %}" class="d-flex" role="search">
-        <input class="form-control me-2" type="search"  name="q" placeholder="Search..." aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
-      <ul class="navbar-nav -auto mb-2 mb-lg-0">
-        <a class="btn btn-primary" style="margin-left: 2px" href="{% url 'account_logout' %}">Sign out
-        </a>
-      </ul>
-    </div>
-  </div>
-</nav>
-
-  {% else %}
-
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="{% url 'account_management:home' %}">ManUp</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <a class="nav-link" href="#">About</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Features</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'account_signup' %}">Join Our Community</a>
-        </li>
-      </ul>
-        <ul class="navbar-nav ms-auto d-flex">
-          <li class="nav-item">
-            <a class="btn btn-primary me-auto " href="{% url 'account_login' %}">Sign In
-            </a>
-          </li>
-        </ul>
-      </li>
-      </ul>
-    </div>
-  </div>
-</nav>
-
-<main>
-
-  {% bootstrap_messages %}
-  {% block content %}{% endblock %}
-
-  <!-- FOOTER -->
-  <footer class="container">
-    <p class="float-end"><a href="#">Back to top</a></p>
-    <p>© 2017–2021 Company, Inc. · <a href="#">Privacy</a> · <a href="#">Terms</a></p>
-  </footer>
-</main>
-
-{% endif %}
+  <!DOCTYPE html>
+<html style="height: 90%" xmlns="http://www.w3.org/1999/html">
+    <head>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>{% block head_title %}{% endblock %}</title>
+      <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+      {% bootstrap_css %}
+      {% bootstrap_javascript %}
+      {% block extra_head %}{% endblock %}
+    </head>
+    <body style="height: 90%">
+      {% if user.is_authenticated %}
+      <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="{% url 'account_management:home' %}">BB</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'account_management:profile_home' %}">Profile</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="{% url 'account_management:user_index' %}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Mentors
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="{% url 'account_management:user_index' %}">Find A Mentor</a></li>
+                  <li><a class="dropdown-item" href="{% url 'account_management:request_index' %}">Your Mentor Requests</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="{% url 'account_management:mentor_index' %}">Your Mentors</a></li>
+                </ul>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="{% url 'groups:group_home' %}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Groups
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="{% url 'groups:group_home' %}">Find A Group</a></li>
+                  <li><a class="dropdown-item" href="{% url 'groups:groups_joined' %}">Your Groups</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="{% url 'groups:groups_moderated' %}">Groups You Manage</a></li>
+                </ul>
+              </li>
+            </ul>
+            <form method="get" action="{% url 'search:results' %}" class="d-flex" role="search">
+              <input class="form-control me-2" type="search"  name="q" placeholder="Search..." aria-label="Search">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+            <ul class="navbar-nav -auto mb-2 mb-lg-0">
+              <a class="btn btn-primary" style="margin-left: 2px" href="{% url 'account_logout' %}">Sign out
+              </a>
+            </ul>
+          </div>
+        </div>
+      </nav>
 
 
-    {% block extra_body %}
-    {% endblock %}
+      {% else %}
 
-    {% block include_js %}
-    {% endblock %}
-    <script>
-      document.addEventListener('DOMContentLoaded', (event) => {
-        // DOM loaded
-        {% block domready %}
-        {% endblock %}
-      })
-    </script>
-  </body>
-</html>
+      <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="{% url 'account_management:home' %}">ManUp</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <a class="nav-link" href="#">About</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Features</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'account_signup' %}">Join Our Community</a>
+              </li>
+            </ul>
+            <ul class="navbar-nav ms-auto d-flex">
+              <li class="nav-item">
+                <a class="btn btn-primary me-auto " href="{% url 'account_login' %}">Sign In
+                </a>
+              </li>
+            </ul>
+            </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      {% endif %}
+
+      {% block content %}
+      {% endblock %}
+
+      {% block extra_body %}
+      {% endblock %}
+
+      {% block include_js %}
+      {% endblock %}
+      <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+          // DOM loaded
+          {% block domready %}
+          {% endblock %}
+        })
+      </script>
+                      <!-- FOOTER -->
+      <footer class="container">
+        <p class="float-end"><a href="#">Back to top</a></p>
+        <p>© 2017–2021 Company, Inc. · <a href="#">Privacy</a> · <a href="#">Terms</a></p>
+      </footer>
+    </body>
+  </html>

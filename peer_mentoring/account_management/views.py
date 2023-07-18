@@ -11,7 +11,7 @@ from .models import FriendRequest, Notification, UserProfile
 
 
 def home(request):
-    return render(request, "account_management/home.html")
+    return render(request, "account/splash.html")
 
 
 @login_required
@@ -50,6 +50,7 @@ def profile_home(request):
     return render(request, "user_profile.html", context)
 
 
+@login_required
 def view_profile(request, user_id):
     user = get_object_or_404(User, id=user_id)
     posts = Post.objects.filter(author=user)
@@ -71,7 +72,7 @@ def user_index(request):
 
 @login_required
 def mentor_index(request):
-    mentors = request.user.userprofile.friends.all()
+    mentors = request.user.userprofile.friends.all().exclude(user=request.user)
     context = {
         "mentors": mentors,
     }
