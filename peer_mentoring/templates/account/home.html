@@ -1,27 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
 
 {% extends 'base.html' %}
 {% load static %}
 
 {% block content %}
 
-<h2>Man+</h2>
+<h2>BB</h2>
 
-{% if request.user.is_authenticated %}
-  Welcome back {{request.user.username}} <a href="{% url 'account_logout' %}">logout</a>
-{% else %}
+{% include "account/splash.html" %}
 
-  {% include "account_management/splash.html" %}
-
-{% endif %}
 
 {% endblock %}
-
-</body>
-</html>

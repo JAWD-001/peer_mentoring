@@ -11,7 +11,7 @@ from .models import FriendRequest, Notification, UserProfile
 
 
 def home(request):
-    return render(request, "account_management/home.html")
+    return render(request, "account/splash.html")
 
 
 @login_required
