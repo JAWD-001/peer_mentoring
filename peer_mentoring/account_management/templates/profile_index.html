@@ -14,7 +14,9 @@
       </div>
       </div>
       <div class="card-body">
-        <div class="fw-bold"><a href="{% url 'account_management:view_profile' profile.user.id %}">{{ profile.user.username }}</a></div>
+        <div class="fw-bold">
+          <a href="{% url 'account_management:view_profile' profile.user.id %}">{{ profile.user.username }}</a>
+        </div>
         <p class="card-text">{{profile.user.title}}</p>
       </div>
       {% if profile != request.user %}
