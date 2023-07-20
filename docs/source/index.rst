@@ -6,15 +6,8 @@
 Welcome to peer_mentoring's documentation!
 ==========================================
 
-.. toctree::
-   :maxdepth: 4
-   :caption: Contents:
-
-   account_management/modules
-   chat/modules
-   groups/modules
-   search/modules
-
+.. automodule:: peer_mentoring
+   :members:
 
 Indices and tables
 ==================
