@@ -1,11 +1,11 @@
 version: '3.8'
 services:
   db:
-    image: postgres:13
+    image: postgres:14
     environment:
-      POSTGRES_DB: mydatabase
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: peer_mentoring
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     volumes:
       - db_data:/var/lib/postgresql/data/
 
@@ -17,6 +17,7 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/code
+      - ./env:/code/.env
     ports:
       - 8000:8000
     depends_on:
