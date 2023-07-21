@@ -84,3 +84,8 @@ input {
     display: flex;
     width: 100%;
 }
+
+.email-options {
+    display: flex;
+    flex-direction: row;
+}

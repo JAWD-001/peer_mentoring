@@ -1,3 +1,4 @@
+
 .login-container {
     display: flex;
     flex-direction: column;
@@ -23,6 +24,8 @@
     margin:10px;
     overflow: scroll;
 }
+
+
 
 
 .login-title {
@@ -83,4 +86,47 @@ input {
 .login-logout-btn {
     display: flex;
     width: 100%;
+}
+
+.email-background {
+    overflow: scroll;
+    width: 98%;
+}
+
+.email-options {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.email-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.email-ctrl-holder {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    border-style: dashed;
+}
+
+.email-button-holder {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+}
+
+.email-add-button {
+    width: 100%;
+    gap: 5px;
 }
