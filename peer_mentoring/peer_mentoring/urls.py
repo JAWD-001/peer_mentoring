@@ -25,4 +25,8 @@ urlpatterns = [
     path("groups/", include("groups.urls")),
     path("search/", include("search.urls")),
     path("", include("account_management.urls")),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "bootstrap5",
+    "storages",
 ]
 
 MIDDLEWARE = [
@@ -98,16 +99,16 @@ CHANNEL_LAYERS = {
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": config("DB_NAME"),
-        "USER": config("DB_USER"),
-        "PASSWORD": config("DB_PASSWORD"),
-        "HOST": config("DB_HOST"),
-        "PORT": config("DB_PORT", cast=int),
-    }
-}
+# DATABASES = {
+#   "default": {
+#      "ENGINE": "django.db.backends.postgresql",
+#     "NAME": config("DB_NAME"),
+#        "USER": config("DB_USER"),
+#        "PASSWORD": config("DB_PASSWORD"),
+#        "HOST": config("DB_HOST"),
+#        "PORT": config("DB_PORT", cast=int),
+#    }
+# }
 
 
 DATABASES = {
@@ -163,14 +164,22 @@ LOGIN_REDIRECT_URL = "/"
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
+
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-]
-
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "mediafiles"
+
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+
+
+AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME")
+AWS_QUERYSTRING_AUTH = False
+
+STATICFILES_STORAGE = "storages.backends.s3boto3.S3ManifestStaticStorage"
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
 
 # Default primary key field type

@@ -19,7 +19,6 @@ def profile_home(request):
     user = request.user
     form = CustomUserChangeForm()
     photo_upload = AddPhotoForm()
-    # user_photos = Photo.objects.filter(user=user)
     recent_posts = Post.objects.filter(author=user).order_by("added")[0:10]
     recent_comments = Comment.objects.filter(author=user).order_by("added")[0:10]
     if request.method == "POST":
