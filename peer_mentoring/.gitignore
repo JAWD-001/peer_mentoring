@@ -127,6 +127,10 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.env.dev
+.env.dev/
+.env.prod
+.env.prod/
 
 # Spyder project settings
 .spyderproject
@@ -162,3 +166,7 @@ cython_debug/
 interests
 photos
 avatar
+
+dockerfile
+docker-compose.yaml
+.dockerignore

@@ -26,9 +26,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(int(config("DEBUG")))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config("DJANGO_ALLOWED_HOSTS").split(" ")
 
 
 # Application definition
@@ -118,6 +118,16 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#    "default": {
+#        "ENGINE": config("SQL_ENGINE", "django.db.backends.sqlite3"),
+#        "NAME": config("SQL_DATABASE", BASE_DIR / "db.sqlite3"),
+#        "USER": config("SQL_USER", "user"),
+#        "PASSWORD": config("SQL_PASSWORD", "password"),
+#        "HOST": config("SQL_HOST", "localhost"),
+#        "PORT": config("SQL_PORT", "5432"),
+#    }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

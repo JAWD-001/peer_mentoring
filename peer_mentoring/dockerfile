@@ -1,25 +1,30 @@
 # Use an official Python runtime as the base image
-FROM python:3
+FROM python:3.11.4
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 # Set the working directory in the container
-WORKDIR /code
+WORKDIR /usr/src/gh_peer_mentoring/peer_mentoring
 
-# Copy the requirements file to the container
-COPY requirements.txt /code/
+# install psycopg2 dependencies
+RUN apt-get update && apt-get install -y libpq-dev gcc
 
-# Install the project dependencies
+
+# copy entrypoint.sh
+COPY ./entrypoint.sh .
+RUN sed -i 's/\r$//g' entrypoint.sh
+RUN chmod +x entrypoint.sh
+
+
+# install dependencies
 RUN pip install --upgrade pip
-RUN pip install --no-cache-dir -r requirements.txt
+COPY ./requirements.txt .
+RUN pip install -r requirements.txt
 
-# Expose the Django server port
-EXPOSE 8000
+# copy project
+COPY . .
 
-# Copy the project code to the container
-COPY . /code/
-
-# Start the Django development server
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# run entrypoint.sh
+ENTRYPOINT ["/usr/src/peer_mentoring/entrypoint.sh"]
