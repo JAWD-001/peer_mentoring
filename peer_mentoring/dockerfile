@@ -6,25 +6,23 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 # Set the working directory in the container
-WORKDIR /usr/src/gh_peer_mentoring/peer_mentoring
+WORKDIR /app
 
-# install psycopg2 dependencies
-RUN apt-get update && apt-get install -y libpq-dev gcc
-
+# install psycopg2 dependencies and netcat
+RUN apt-get update && apt-get install -y libpq-dev gcc netcat-openbsd
 
 # copy entrypoint.sh
-COPY ./entrypoint.sh .
-RUN sed -i 's/\r$//g' entrypoint.sh
-RUN chmod +x entrypoint.sh
-
+COPY ./entrypoint.sh /app/entrypoint.sh
+RUN sed -i 's/\r$//g' /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
 
 # install dependencies
 RUN pip install --upgrade pip
-COPY ./requirements.txt .
-RUN pip install -r requirements.txt
+COPY ./requirements.txt /app/requirements.txt
+RUN pip install -r /app/requirements.txt
 
 # copy project
-COPY . .
+COPY . /app/
 
 # run entrypoint.sh
-ENTRYPOINT ["/usr/src/peer_mentoring/entrypoint.sh"]
+ENTRYPOINT ["/app/entrypoint.sh"]

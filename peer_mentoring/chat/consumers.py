@@ -2,11 +2,7 @@ import json
 
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
-from django.contrib.auth.models import User
 from django.utils import timezone
-from groups.models import Group
-
-from .models import ChatMessage, PrivateChatMessage
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -38,6 +34,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def save_chat_message(self, message, now):
+        from groups.models import Group  # Moved here
+
+        from .models import ChatMessage  # Moved here
+
         group = Group.objects.get(id=self.id)
         ChatMessage.objects.create(
             group=group, user=self.user, message=message, added=now.isoformat()
@@ -51,7 +51,6 @@ class PrivateChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.sender = self.scope["user"]
         self.receiver_id = self.scope["url_route"]["kwargs"]["receiver_id"]
-        # sort the ids to create a unique room name for the chat between these two users
         ids = sorted([self.sender.id, int(self.receiver_id)])
         self.room_group_name = f"private_chat_{ids[0]}_{ids[1]}"
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
@@ -66,7 +65,6 @@ class PrivateChatConsumer(AsyncWebsocketConsumer):
         message = text_data_json["message"]
         now = timezone.now()
 
-        # only allow messages from the two users in the chat
         if self.scope["user"].id == self.sender.id or self.scope["user"].id == int(
             self.receiver_id
         ):
@@ -84,12 +82,12 @@ class PrivateChatConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def save_chat_message(self, message, now):
-        sender_user = User.objects.get(
-            pk=self.sender.id
-        )  # assuming self.sender is a User instance
-        receiver_user = User.objects.get(
-            pk=int(self.receiver_id)
-        )  # get receiver as a User instance
+        from django.contrib.auth.models import User  # Moved here
+
+        from .models import PrivateChatMessage  # Moved here
+
+        sender_user = User.objects.get(pk=self.sender.id)
+        receiver_user = User.objects.get(pk=int(self.receiver_id))
         PrivateChatMessage.objects.create(
             sender=sender_user,
             receiver=receiver_user,
