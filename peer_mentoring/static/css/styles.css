@@ -99,21 +99,18 @@ input {
     justify-content: center;
     align-items: center;
     width: 100%;
-    margin-bottom: 30px;
 }
 
 .email-list {
     display: flex;
-    flex-direction: row;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
     width: 100%;
 }
 
 .email-ctrl-holder {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     width: 100%;
     border-style: dashed;
@@ -123,10 +120,18 @@ input {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 5px;
+    gap: 10px;
 }
 
 .email-add-button {
     width: 100%;
     gap: 5px;
+}
+
+.add-email{
+    display:flex;
+    gap: 10px;
+}
+#id_email {
+    margin-left:10px;
 }
