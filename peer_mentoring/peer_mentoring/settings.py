@@ -89,6 +89,8 @@ WSGI_APPLICATION = "peer_mentoring.wsgi.application"
 
 ASGI_APPLICATION = "peer_mentoring.asgi.application"
 
+
+# redis for development
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
@@ -96,21 +98,20 @@ CHANNEL_LAYERS = {
     },
 }
 
+# redis for deployment
+"""
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {"hosts": [("redis", 6379)]},
+    },
+}
+"""
+
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-# DATABASES = {
-#   "default": {
-#      "ENGINE": "django.db.backends.postgresql",
-#     "NAME": config("DB_NAME"),
-#        "USER": config("DB_USER"),
-#        "PASSWORD": config("DB_PASSWORD"),
-#        "HOST": config("DB_HOST"),
-#        "PORT": config("DB_PORT", cast=int),
-#    }
-# }
-
-
+# sqlite for development
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -118,16 +119,19 @@ DATABASES = {
     }
 }
 
-# DATABASES = {
-#    "default": {
-#        "ENGINE": config("SQL_ENGINE", "django.db.backends.sqlite3"),
-#        "NAME": config("SQL_DATABASE", BASE_DIR / "db.sqlite3"),
-#        "USER": config("SQL_USER", "user"),
-#        "PASSWORD": config("SQL_PASSWORD", "password"),
-#        "HOST": config("SQL_HOST", "localhost"),
-#        "PORT": config("SQL_PORT", "5432"),
-#    }
-# }
+# postgres for deployment
+"""
+DATABASES = {
+    "default": {
+        "ENGINE": config("SQL_ENGINE", "django.db.backends.sqlite3"),
+        "NAME": config("SQL_DATABASE", BASE_DIR / "db.sqlite3"),
+        "USER": config("SQL_USER", "user"),
+        "PASSWORD": config("SQL_PASSWORD", "password"),
+        "HOST": config("SQL_HOST", "localhost"),
+        "PORT": config("SQL_PORT", "5432"),
+    }
+}
+"""
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
