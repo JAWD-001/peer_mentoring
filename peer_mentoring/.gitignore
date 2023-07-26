@@ -166,7 +166,3 @@ cython_debug/
 interests
 photos
 avatar
-
-dockerfile
-docker-compose.yaml
-.dockerignore
