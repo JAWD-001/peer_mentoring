@@ -86,20 +86,18 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "peer_mentoring.wsgi.application"
-
 ASGI_APPLICATION = "peer_mentoring.asgi.application"
 
 
 # redis for development
-"""
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {"hosts": [("127.0.0.1", 6379)]},
     },
 }
-"""
 
+"""
 # redis for deployment
 CHANNEL_LAYERS = {
     "default": {
@@ -107,12 +105,12 @@ CHANNEL_LAYERS = {
         "CONFIG": {"hosts": [("redis", 6379)]},
     },
 }
-
+"""
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-"""
+
 # sqlite for development
 DATABASES = {
     "default": {
@@ -120,10 +118,9 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
 """
-
 # postgres for deployment
-
 DATABASES = {
     "default": {
         "ENGINE": config("SQL_ENGINE", "django.db.backends.sqlite3"),
@@ -134,7 +131,7 @@ DATABASES = {
         "PORT": config("SQL_PORT", "5432"),
     }
 }
-
+"""
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

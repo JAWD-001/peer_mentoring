@@ -26,8 +26,6 @@
 }
 
 
-
-
 .login-title {
     display: flex;
     flex-direction: column;
@@ -129,4 +127,14 @@ input {
 .email-add-button {
     width: 100%;
     gap: 5px;
+}
+
+
+#id_email {
+    margin-left:10px;
+    width: 1000px;
+}
+
+.card {
+    height:300px;
 }
