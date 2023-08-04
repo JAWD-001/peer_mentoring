@@ -16,7 +16,7 @@ from pathlib import Path
 from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 # Quick-start development settings - unsuitable for production
@@ -26,10 +26,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(int(config("DEBUG")))
 
 ALLOWED_HOSTS = config("DJANGO_ALLOWED_HOSTS").split(" ")
-
 
 # Application definition
 
@@ -97,41 +95,12 @@ CHANNEL_LAYERS = {
     },
 }
 
-"""
-# redis for deployment
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {"hosts": [("redis", 6379)]},
-    },
-}
-"""
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-
 # sqlite for development
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
 
-"""
-# postgres for deployment
-DATABASES = {
-    "default": {
-        "ENGINE": config("SQL_ENGINE", "django.db.backends.sqlite3"),
-        "NAME": config("SQL_DATABASE", BASE_DIR / "db.sqlite3"),
-        "USER": config("SQL_USER", "user"),
-        "PASSWORD": config("SQL_PASSWORD", "password"),
-        "HOST": config("SQL_HOST", "localhost"),
-        "PORT": config("SQL_PORT", "5432"),
-    }
-}
-"""
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -217,7 +186,3 @@ EMAIL_USE_TLS = True
 
 DEFAULT_FROM_EMAIL = os.environ.get("FROM_EMAIL")
 SENDGRID_SANDBOX_MODE_IN_DEBUG = True
-
-CSRF_TRUSTED_ORIGINS = ["http://localhost:1337"]
-
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")

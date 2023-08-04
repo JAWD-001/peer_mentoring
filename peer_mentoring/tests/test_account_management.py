@@ -22,14 +22,15 @@ def test_profile_home_post_photo(client_authenticated, user, photo):
         photo.description is not None
     ), "Photo instance doesn't have a description!"  # noqa: S101
 
-    with open(photo.image.path, "rb") as img_file:
-        Photo.objects.all().delete()
+    # Open the file directly from the remote storage
+    img_file = photo.image.open(mode="rb")
+    Photo.objects.all().delete()
 
-        response = client_authenticated.post(
-            reverse("account_management:profile_home"),
-            data={"image": img_file, "description": photo.description},
-            format="multipart",
-        )
+    response = client_authenticated.post(
+        reverse("account_management:profile_home"),
+        data={"image": img_file, "description": photo.description},
+        format="multipart",
+    )
 
     assert response.status_code == 200  # noqa: S101
     assert (  # noqa: S101
@@ -43,7 +44,7 @@ def test_profile_home_post_photo(client_authenticated, user, photo):
 
     assert "Photo Added!" in list(  # noqa: S101
         map(str, list(get_messages(response.wsgi_request)))
-    )
+    )  # noqa: S101
 
 
 @pytest.mark.django_db
