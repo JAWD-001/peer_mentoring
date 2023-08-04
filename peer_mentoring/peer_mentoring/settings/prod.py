@@ -9,7 +9,7 @@ ADMINS = [
     ("James", "dycus.j.jd@gmail.com"),
 ]
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["*", "bondedbrotherhood.com", "www.bondedbrotherhood.com"]
 
 DATABASES = {
     "default": {
@@ -25,3 +25,8 @@ DATABASES = {
 REDIS_URL = "redis://cache:6379"
 CHANNEL_LAYERS["default"]["CONFIG"]["hosts"] = [REDIS_URL]  # noqa
 CACHES["default"]["LOCATION"] = REDIS_URL
+
+# Security
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = True
