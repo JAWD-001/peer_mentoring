@@ -23,18 +23,23 @@ services:
   web:
     build: ./peer_mentoring
     command: [ "./wait-for-it.sh", "db:5432", "--",
-              "python", "/code/peer_mentoring/manage.py", "runserver",
-              "0.0.0.0:8000"]
+              "daphne","-u", "/code/peer_mentoring/daphne.sock",
+              "peer_mentoring.asgi:application"]
     restart: always
     volumes:
       - .:/code
-    ports:
-      - 8000:8000
     environment:
       - DJANGO_SETTINGS_MODULE=peer_mentoring.settings.prod
     depends_on:
       - db
       - cache
 
-volumes:
-  postgres_data:
+  nginx:
+    image: nginx:1.23.1
+    restart: always
+    volumes:
+      - ./config/nginx:/etc/nginx/templates
+      - .:/code
+    ports:
+      - "80:80"
+      - "443:443"
