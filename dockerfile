@@ -10,12 +10,9 @@ WORKDIR /code
 
 # install dependencies
 RUN pip install --upgrade pip
-COPY requirements.txt /code/
+COPY peer_mentoring/requirements.txt /code/
 RUN pip install -r requirements.txt
 
-#copy wait-for-it
-COPY ./wait-for-it.sh
-RUN chmod +x wait-for-it.sh
 
 # copy project
 COPY . /code/
