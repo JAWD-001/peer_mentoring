@@ -19,17 +19,37 @@ services:
     volumes:
       - ./data/cache:/data
 
-
   web:
-    build: ./peer_mentoring
+    build: .
     command: [ "./wait-for-it.sh", "db:5432", "--",
-              "daphne","-u", "/code/peer_mentoring/daphne.sock",
-              "peer_mentoring.asgi:application"]
+              "uwsgi","--ini", "/code/config/uwsgi/uwsgi.ini",
+              ]
     restart: always
     volumes:
       - .:/code
     environment:
       - DJANGO_SETTINGS_MODULE=peer_mentoring.settings.prod
+      - POSTGRES_DB=peer_mentoring
+      - POSTGRES_USER=peer_mentoring
+      - POSTGRES_PASSWORD=peer_mentoring
+    depends_on:
+      - db
+      - cache
+
+  daphne:
+    build:  .
+    working_dir: /code/peer_mentoring
+    command: ["../wait-for-it.sh", "db:5432", "--",
+              "daphne", "-u", "/code/peer_mentoring/daphne.sock",
+              "peer_mentoring.asgi:application"]
+    restart: always
+    volumes:
+      - .:/code
+    environment:
+      - DJANGO_SETTINGS_MODULE=educa.settings.prod
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
     depends_on:
       - db
       - cache

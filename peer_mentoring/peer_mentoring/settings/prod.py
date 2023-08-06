@@ -11,14 +11,15 @@ ADMINS = [
 
 ALLOWED_HOSTS = ["*", "bondedbrotherhood.com", "www.bondedbrotherhood.com"]
 
+
 DATABASES = {
     "default": {
-        "ENGINE": config("SQL_ENGINE", "django.db.backends.sqlite3"),
-        "NAME": config("SQL_DATABASE", BASE_DIR / "db.sqlite3"),  # noqa
-        "USER": config("SQL_USER", "user"),
-        "PASSWORD": config("SQL_PASSWORD", "password"),
-        "HOST": config("SQL_HOST", "localhost"),
-        "PORT": config("SQL_PORT", "5432"),
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": config("POSTGRES_DB"),
+        "USER": config("POSTGRES_USER"),
+        "PASSWORD": config("POSTGRES_PASSWORD"),
+        "HOST": "db",
+        "PORT": 5432,
     }
 }
 
