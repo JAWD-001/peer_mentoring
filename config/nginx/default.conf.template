@@ -12,12 +12,18 @@ server {
     listen              80;
     server_name         www.bondedbrotherhood.com bondedbrotherhood.com;
     return              301 https://$host$request_uri;
+
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+        }
 }
 
 server {
     listen              443 ssl;
-    ssl_certificate     /code/peer_mentoring/ssl/peer_mentoring.cert
-    ssl_certificate_key /code/peer_mentoring/ssl/peer_mentoring.key;
+    ssl_certificate     /etc/letsencrypt/live/bondedbrotherhood.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/bondedbrotherhood.com/privkey.pem;
+    include             /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam         /etc/letsencrypt/ssl-dhparams.pem;
     server_name         www.bondedbrotherhood.com bondedbrotherhood.com;
     error_log           stderr warn;
     access_log          /dev/stdout main;
