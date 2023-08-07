@@ -9,9 +9,9 @@ services:
     volumes:
       - ./data/db:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=peer_mentoring
+      - POSTGRES_USER=peer_mentoring
+      - POSTGRES_PASSWORD=peer_mentoring
 
   cache:
     image: redis:7.0.4
@@ -46,10 +46,10 @@ services:
     volumes:
       - .:/code
     environment:
-      - DJANGO_SETTINGS_MODULE=educa.settings.prod
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - DJANGO_SETTINGS_MODULE=peer_mentoring.settings.prod
+      - POSTGRES_DB=peer_mentoring
+      - POSTGRES_USER=peer_mentoring
+      - POSTGRES_PASSWORD=peer_mentoring
     depends_on:
       - db
       - cache
@@ -57,9 +57,18 @@ services:
   nginx:
     image: nginx:1.23.1
     restart: always
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
     volumes:
       - ./config/nginx:/etc/nginx/templates
       - .:/code
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
     ports:
       - "80:80"
       - "443:443"
+  certbot:
+    image: certbot/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
