@@ -1,8 +1,12 @@
+import io
+
 import pytest
 from account_management.forms import AddPhotoForm, CustomUserChangeForm
 from account_management.models import FriendRequest, Photo
 from django.contrib.auth.models import User
 from django.contrib.messages import get_messages
+from django.core.files import File
+from django.core.files.storage import default_storage
 from django.http import request
 from django.urls import reverse
 
@@ -22,24 +26,30 @@ def test_profile_home_post_photo(client_authenticated, user, photo):
         photo.description is not None
     ), "Photo instance doesn't have a description!"  # noqa: S101
 
-    with open(photo.image.path, "rb") as img_file:
-        Photo.objects.all().delete()
+    # Fetch the photo file from S3 using Django's default storage (which should be set to S3 in your settings)
+    photo_file_content = default_storage.open(photo.image.name).read()
 
-        response = client_authenticated.post(
-            reverse("account_management:profile_home"),
-            data={"image": img_file, "description": photo.description},
-            format="multipart",
-        )
+    # Convert the content to an in-memory file (BytesIO) for the test client post request
+    img_file = io.BytesIO(photo_file_content)
+    img_file.name = photo.image.name
+
+    Photo.objects.all().delete()
+
+    response = client_authenticated.post(
+        reverse("account_management:profile_home"),
+        data={"image": File(img_file), "description": photo.description},
+        format="multipart",
+    )
 
     assert response.status_code == 200  # noqa: S101
     assert (  # noqa: S101
         Photo.objects.count() == 1
-    ), "Expected one Photo object after the POST request!"
+    ), "Expected one Photo object after the POST request!"  # noqa: S101
 
     new_photo = Photo.objects.first()
     assert (  # noqa: S101
         new_photo.description == photo.description
-    ), "Description of the newly added photo doesn't match with the provided one!"
+    ), "Description of the newly added photo doesn't match with the provided one!"  # noqa: S101
 
     assert "Photo Added!" in list(  # noqa: S101
         map(str, list(get_messages(response.wsgi_request)))
