@@ -1,10 +1,150 @@
+
 .login-container {
     display: flex;
     flex-direction: column;
+    height: 85%;
+    width: 98%;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    padding:24px;
+    margin:10px;
+    overflow: scroll;
 }
 
+
 .login-form {
+    display: flex;
     background-color: #0d6efd;
     justify-content: center;
     align-items: center;
+    margin-left: 200px;
+}
+
+
+.logout-container {
+    display: flex;
+    flex-direction: column;
+    height: 85%;
+    width: 98%;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    padding:24px;
+    margin:10px;
+    overflow: scroll;
+}
+
+
+.login-title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.login-title-signup-link {
+    margin-bottom: 10%;
+}
+
+.login-form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#id_login {
+    padding-right: 40px;
+    margin-left: 5px;
+}
+
+#id_password {
+    padding-right: 40px;
+    margin-left: 5px;
+}
+
+#id_remember {
+    width: 15px;
+    margin-left: 5px;
+}
+
+input {
+    border-radius: 4px;
+    width: 65%;
+}
+
+
+.login-options {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 5%;
+}
+
+.login-logout-btn {
+    display: flex;
+    width: 100%
+}
+
+.logout-title {
+    margin-bottom: 100px;
+}
+
+.login-logout-btn {
+    display: flex;
+    width: 100%;
+}
+
+.email-background {
+    overflow: scroll;
+    width: 98%;
+}
+
+.email-options {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.email-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+}
+
+.email-ctrl-holder {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    border-style: dashed;
+}
+
+.email-button-holder {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+}
+
+.email-add-button {
+    width: 100%;
+    gap: 5px;
+}
+
+
+#id_email {
+    margin-left:10px;
+    width: 1000px;
+}
+
+.card {
+    height:300px;
 }
