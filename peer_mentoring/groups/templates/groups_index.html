@@ -3,11 +3,13 @@
 {% load group_filters %}
 
 {% block content %}
-  <div class="group-index-list">
+  <div class="group-index-list" style="height:100%">
   {% for group in groups %}
-    <div class="card" style="width: 18rem;">
-      <img src="{{group.avatar.image.url}}" class="card-img-top" alt="...">
-      <div class="card-body">
+    <div class="group-index-card" style="display:flex; padding:24px;">
+      <div>
+        <img src="{{group.avatar.image.url}}" class="card-img-top" style="width:100px; height:100px;border-radius: 50%" alt="...">
+      </div>
+      <div class="card-body"style="display:flex; flex-direction: column; justify-content: space-around">
         <div class="fw-bold"><a href="{% url 'groups:group_detail' group.id %}">{{ group }}</a></div>
         <p class="card-text">{{group.description}}</p>
       </div>
@@ -22,13 +24,16 @@
       {% endif %}
     </div>
   {% endfor %}
-  </div>
+
 
 
   <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+<div style="padding:72px;display:flex;justify-content: flex-end">
+  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
   Create a New Group
-</button>
+  </button>
+</div>
+  </div>
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -51,5 +56,4 @@
     </div>
   </div>
 </div>
-
 {% endblock %}
