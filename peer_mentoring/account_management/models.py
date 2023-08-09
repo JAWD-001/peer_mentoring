@@ -17,7 +17,7 @@ class Interest(models.Model):
 class Photo(models.Model):
     id = models.BigAutoField(primary_key=True)
     image = models.ImageField(blank=False, upload_to="photos")
-    description = models.CharField(blank=True, null=True, max_length=200)
+    description = models.CharField(blank=False, null=True, max_length=200)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
