@@ -203,3 +203,48 @@ input {
 .email-add-button {
     width:35%
 }
+
+.password-change-container {
+    display:flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.password-change-title{
+    margin: 40px;
+}
+
+.password-change-form {
+    display: flex;
+    width:75%;
+    justify-content: center;
+    align-items: center;
+}
+.password-change-form p {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.password-change-form p label{
+    padding-right: 20px;
+}
+
+.password-change-form p input {
+    margin-left: 20px;
+}
+
+.password-change-form-button{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap:7px;
+    margin-top: 20px;
+}
+
+.password-change-form-link {
+
+}
