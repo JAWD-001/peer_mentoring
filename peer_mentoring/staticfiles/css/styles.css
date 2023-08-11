@@ -148,3 +148,13 @@ input {
 .card {
     height:300px;
 }
+
+
+.email-add-button-container{
+    display:flex;
+    justify-content:center;
+}
+
+.email-add-button {
+    width:35%
+}
