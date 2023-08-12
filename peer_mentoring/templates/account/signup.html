@@ -1,21 +1,27 @@
-{% extends "account/base.html" %}
-
+{% extends "base.html" %}
+{% load static %}
 {% load i18n %}
 
-{% block head_title %}{% trans "Signup" %}{% endblock %}
 
-{% block content %}
-<h1>{% trans "Sign Up" %}</h1>
+  {% block head_title %}{% trans "Signup" %}{% endblock %}
 
-<p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
+  {% block content %}
+<div class="sign-up-container" style="height:100%; width:100%; display:flex; flex-direction: column; justify-content:center; align-items: center; gap:20px;margin-top:-50px;margin-bottom:50px;">
+  <h1>{% trans "Sign Up" %}</h1>
 
-<form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
-  {% csrf_token %}
-  {{ form.as_p }}
-  {% if redirect_field_value %}
-  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-  {% endif %}
-  <button type="submit">{% trans "Sign Up" %} &raquo;</button>
-</form>
+  <p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
+<div class="password-change-form" style="display:flex;flex-direction: column">
+  <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    {% if redirect_field_value %}
+    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+    {% endif %}
+    <div style="display: flex;justify-content:center; margin-top: 40px;">
+    <button class="btn btn-primary" style="width:150px"type="submit">{% trans "Sign Up" %}</button>
+    </div>
+  </form>
+  </div>
+</div>
 
 {% endblock %}

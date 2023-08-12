@@ -16,4 +16,5 @@ class PrivateChatMessage(models.Model):
         User, on_delete=models.CASCADE, related_name="receiver"
     )
     message = models.TextField(max_length=300)
+    unread = models.BooleanField(default=True)
     added = models.DateTimeField(auto_now_add=True)

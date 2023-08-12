@@ -11,7 +11,6 @@ from .models import ChatMessage, PrivateChatMessage
 def group_chat_room(request, group_id):
     group = Group.objects.get(pk=group_id)
     chat_messages = ChatMessage.objects.filter(group=group)
-
     user_groups = group.members.filter(username=request.user.username)
     if user_groups.count() == 0:
         return HttpResponseForbidden()
@@ -31,6 +30,10 @@ def private_chat_room(request, sender_id, receiver_id):
     private_chat_messages = PrivateChatMessage.objects.filter(
         sender=sender, receiver=receiver
     )
+
+    new_messages = PrivateChatMessage.objects.filter(unread=True)
+    if new_messages.exists():
+        new_messages.update(unread=False)
 
     private_group = sender.userprofile.friends.filter(user=receiver)
     if private_group.count() == 0:
