@@ -31,7 +31,7 @@ def private_chat_room(request, sender_id, receiver_id):
         sender=sender, receiver=receiver
     )
 
-    new_messages = PrivateChatMessage.objects.filter(unread=True)
+    new_messages = private_chat_messages.filter(unread=True)
     if new_messages.exists():
         new_messages.update(unread=False)
 
