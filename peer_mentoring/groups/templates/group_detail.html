@@ -6,8 +6,8 @@
     {{group.title}}
   </div>
   <div class="group-heading">
-    {{group.avatar.url}}
-    {{group.description}}
+    <img src="{{group.avatar.image.url}}" style="height:100px; width:auto;">
+    <p>{{group.description}}</p>
   </div>
 {% if group.moderator == request.user %}
   <a href="{% url 'groups:group_request_index' group.id %}"><p>View Group Requests</p></a>
