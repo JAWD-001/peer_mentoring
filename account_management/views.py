@@ -1,8 +1,9 @@
+from chat.models import PrivateChatMessage
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, redirect, render
-from groups.models import Comment, Post
+from groups.models import Comment, Group, Post
 
 from .forms import AddPhotoForm, CustomUserChangeForm
 from .models import FriendRequest, Notification, UserProfile
@@ -11,7 +12,15 @@ from .models import FriendRequest, Notification, UserProfile
 
 
 def home(request):
-    return render(request, "account/splash.html")
+    user = request.user
+    chats = PrivateChatMessage.objects.filter(sender=user)
+    groups = Group.objects.filter(members=user)
+    context = {
+        "user": user,
+        "chats": chats,
+        "groups": groups,
+    }
+    return render(request, "account/splash.html", context)
 
 
 @login_required

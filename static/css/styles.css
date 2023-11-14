@@ -1,3 +1,4 @@
+
 .login-container {
     display: flex;
     flex-direction: column;
@@ -24,7 +25,6 @@
     overflow: scroll;
 }
 
-
 .login-title {
     display: flex;
     flex-direction: column;
@@ -32,6 +32,7 @@
     justify-content: center;
     text-align: center;
     margin-bottom: 10px;
+
 }
 
 .login-title-signup-link {
@@ -78,9 +79,182 @@ input {
 
 .logout-title {
     margin-bottom: 100px;
+    color: #0d6efd;
 }
 
 .login-logout-btn {
     display: flex;
     width: 100%;
+}
+
+.email-background {
+    overflow: scroll;
+    width: 98%;
+}
+
+.email-options {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.email-list-label{
+    display:flex;
+    align-items:center;
+    gap:8px
+}
+
+.email-list-verification {
+    display:flex;
+    align-items:center;
+    margin:0px;
+}
+
+.verified{
+    margin:0px;
+}
+
+
+.email-list {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 100%;
+    column-gap: 48px;
+    border: solid 1px grey;
+    border-radius: 4px;
+    box-shadow: 1px 2px 2px grey;
+    padding: 24px;
+    margin-bottom: 20px;
+}
+
+.email-ctrl-holder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    border-style: dashed;
+}
+
+.email-button-holder {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+}
+
+
+.email-add-button {
+    width: 100%;
+    gap: 5px;
+}
+
+.add-email{
+    display:flex;
+    gap: 10px;
+}
+
+#id_email {
+    margin-left:10px;
+    width:300px;
+}
+
+.card {
+    height:300px;
+}
+
+.email-background {
+    height:100%;
+}
+
+.email-add {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    border: solid 1px grey;
+    border-radius: 4px;
+    box-shadow: 1px 2px 2px grey;
+    padding:24px;
+}
+
+.add-email-container {
+    display:flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items: center;
+}
+
+.add-email-title {
+    margin-bottom:15px;
+}
+
+.email-add-form-container{
+    display:flex;
+    justify-content: space-between;
+}
+
+.email-add-button-container {
+    display:flex;
+    justify-content:flex-end;
+}
+
+.email-add-button {
+    width:35%
+}
+
+.password-change-container {
+    display:flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.password-change-title{
+    margin: 40px;
+}
+
+.password-change-form {
+    display: flex;
+    width:75%;
+    justify-content: center;
+    align-items: center;
+}
+
+.password-change-form p {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-left: 10px;
+}
+
+.password-change-form p input {
+    margin-left: 20px;
+    width: 250px;
+}
+
+.password-change-form-button{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap:10px;
+    margin-top: 30px;
+}
+
+.password-reset-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%280, 0, 0, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+#id_email{
+    width:250px;
 }
